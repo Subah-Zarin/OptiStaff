@@ -173,7 +173,7 @@ optistaff/
 
 ## 📄 License
 
-This project is built for **CSE2100 Software Development Lab-IV** and is intended for academic use.
+This project is built for **CSE3100 Software Development Lab-IV** and is intended for academic use.
 
 
 
