@@ -3,6 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController; 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AttendanceController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('attendance', AttendanceController::class);
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
+    Route::resource('/attendance', AttendanceController::class);
+
 });
 
 require __DIR__.'/auth.php';
