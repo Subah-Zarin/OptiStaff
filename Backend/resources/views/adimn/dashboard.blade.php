@@ -6,3 +6,4 @@
     <p>Welcome, {{ auth()->user()->name }} ({{ auth()->user()->role }})</p>
 </div>
 @endsection
+
