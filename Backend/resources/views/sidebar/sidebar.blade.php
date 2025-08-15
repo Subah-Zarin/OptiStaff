@@ -14,7 +14,7 @@
         @php
             $menu = [
                 ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('dashboard')],
-                ['label' => 'Employees', 'icon' => 'user-group', 'url' => '#'],
+                ['label' => 'Employees', 'icon' => 'user-group', 'url' => route('employees.index')],
                 ['label' => 'Attendence', 'icon' => 'clipboard-list', 'url' => '#'],
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [
                     ['label' => 'My leave', 'url' => '#'],

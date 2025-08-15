@@ -1,16 +1,20 @@
 <x-app-layout>
+    @if(auth()->user()->role === 'user')
+        
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Employee Dashboard') }}
         </h2>
-    </x-slot>
+   
 
     <div class="grid grid-cols-12 gap-6">
 
         <!-- Welcome Section -->
         <div class="col-span-12 bg-white p-6 rounded-lg shadow flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Welcome, John Doe!</h1>
+                <h1 class="text-2xl font-bold text-gray-800">
+                        Welcome, {{ auth()->user()->name }}!
+                    </h1>
                 <p class="text-gray-500">Here's your HR dashboard overview.</p>
             </div>
             <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
@@ -177,4 +181,12 @@
             }
         });
     </script>
+     @else
+        <div class="p-6">
+            <h1 class="text-red-600 font-bold text-lg">
+                You are not authorized to view this page.
+            </h1>
+        </div>
+    @endif
+     </x-slot>
 </x-app-layout>
