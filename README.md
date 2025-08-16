@@ -27,11 +27,17 @@ Key highlights include:
 
 Track real-time coding progress:  
 
-Name: Quazi Zarin Subah
-
-ID: 20220204079
- 
+**Quazi Zarin Subah** (ID: 20220204079)  
 [![wakatime](https://wakatime.com/badge/user/145cad6d-8c1b-4198-8921-1fa83c455eb5/project/53ff35ab-e8a9-46b6-886f-d0dcb6bc1f85.svg)](https://wakatime.com/badge/user/145cad6d-8c1b-4198-8921-1fa83c455eb5/project/53ff35ab-e8a9-46b6-886f-d0dcb6bc1f85)
+
+**Arpa Adhikary Tathai** (ID: 20220204094)  
+[![wakatime](https://wakatime.com/badge/user/e0ed99f9-5f30-4f27-9920-703655de3846/project/319e9e2f-fa6b-4821-b21c-0f1eb969aa81.svg)](https://wakatime.com/badge/user/e0ed99f9-5f30-4f27-9920-703655de3846/project/319e9e2f-fa6b-4821-b21c-0f1eb969aa81)
+
+**Zarin Tasnim Ahmed** (ID: 20220204096)  
+[![wakatime](https://wakatime.com/badge/user/21fea1a3-79be-4a16-99bd-d0bf8076959b/project/da6ddc39-bf0b-4995-b28e-4675c3e35905.svg)](https://wakatime.com/badge/user/21fea1a3-79be-4a16-99bd-d0bf8076959b/project/da6ddc39-bf0b-4995-b28e-4675c3e35905)
+
+**Prionty Saha** (ID: 20220204106)  
+[![wakatime](https://wakatime.com/badge/user/3944b5f4-3bb5-4f43-a702-0fcf1e7bd0e9/project/e21298b2-1a34-47ba-96b9-50fb855f389f.svg)](https://wakatime.com/badge/user/3944b5f4-3bb5-4f43-a702-0fcf1e7bd0e9/project/e21298b2-1a34-47ba-96b9-50fb855f389f)
 
 ---
 
