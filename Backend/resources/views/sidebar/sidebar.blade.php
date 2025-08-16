@@ -1,7 +1,6 @@
-<aside x-data="{ open: true }"
-       :class="open ? 'w-64' : 'w-20'"
+<aside 
+       :class="open ? 'w-64' : 'w-20'"  
        class="bg-white border-r border-gray-200 h-screen transition-all duration-300 flex flex-col shadow-sm fixed">
-
 
     <!-- Logo -->
     <div class="flex items-center justify-center h-16 border-b border-gray-200">
