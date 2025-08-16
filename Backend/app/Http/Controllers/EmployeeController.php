@@ -11,8 +11,7 @@ class EmployeeController extends Controller
     {
         
         $employees = User::select('id', 'name', 'email', 'role', 'created_at', 'updated_at')->get();
-
-  
-        return view('employee.Employee', compact('employees'));
+    $pageTitle = "Employees";
+    return view('employee.Employee', compact('employees', 'pageTitle'));
     }
 }

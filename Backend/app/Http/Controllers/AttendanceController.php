@@ -18,7 +18,8 @@ class AttendanceController extends Controller
             ->when($request->employee, fn($query) => $query->where('employee_id', $request->employee))
             ->paginate(10);
 
-        return view('attendance', compact('attendances', 'employees'));
+       $pageTitle = "Attendance";
+    return view('attendance', compact('attendances', 'employees', 'pageTitle'));
     }
 
     // Show form to create attendance

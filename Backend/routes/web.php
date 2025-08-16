@@ -10,8 +10,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/dashboard', function () {
-    return view('dashboard.dashboard'); 
+    return view('dashboard.dashboard', ['pageTitle' => 'Dashboard']);
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('attendance', AttendanceController::class);
