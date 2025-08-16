@@ -8,13 +8,14 @@
     <!-- Page Header -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Employee Attendance</h1>
-        <a href="{{ route('attendance.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
-            <i class="fas fa-plus mr-2"></i> Add Attendance
-        </a>
+        <a href="{{ route('attendance.create') }}" 
+   class="bg-blue-300 text-black px-3 py-1.5 rounded-md shadow hover:bg-blue-400 transition duration-200 flex items-center text-sm">
+    <i class="fas fa-plus mr-1"></i> Add Attendance
+</a>
     </div>
 
     <!-- Filter Form -->
-    <form method="GET" action="{{ route('attendance.index') }}" class="flex flex-wrap gap-4 mb-6">
+    <form method="GET" action="{{ route('attendance.index') }}" class="flex flex-wrap gap-4 mb-6 justify-center">
         <input type="date" name="date" value="{{ request('date') }}" class="border rounded px-3 py-2">
         <select name="employee" class="border rounded px-3 py-2">
             <option value="">All Employees</option>
@@ -29,15 +30,15 @@
     </form>
 
     <!-- Attendance Table -->
-    <div class="bg-white rounded-lg shadow overflow-x-auto">
-        <table class="min-w-full border border-gray-200">
+    <div class="bg-white rounded-lg shadow overflow-x-auto mx-auto">
+        <table class="min-w-full border border-gray-200 text-left">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="py-3 px-4 border-b text-left">#</th>
-                    <th class="py-3 px-4 border-b text-left">Employee</th>
-                    <th class="py-3 px-4 border-b text-left">Date</th>
-                    <th class="py-3 px-4 border-b text-left">Status</th>
-                    <th class="py-3 px-4 border-b text-left">Notes</th>
+                    <th class="py-3 px-4 border-b">#</th>
+                    <th class="py-3 px-4 border-b">Employee</th>
+                    <th class="py-3 px-4 border-b">Date</th>
+                    <th class="py-3 px-4 border-b">Status</th>
+                    <th class="py-3 px-4 border-b">Notes</th>
                     <th class="py-3 px-4 border-b text-center">Actions</th>
                 </tr>
             </thead>
@@ -79,7 +80,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-4">
+    <div class="mt-4 flex justify-center">
         {{ $attendances->links() }}
     </div>
 
