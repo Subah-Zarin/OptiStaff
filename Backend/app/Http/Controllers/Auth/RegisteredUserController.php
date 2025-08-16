@@ -31,14 +31,12 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'role' => ['required', 'in:admin,user'], // Validate role
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
-            'role' => $request->role, // Save role
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -47,11 +45,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-       if (auth()->user()->role === 'admin') {
-    return redirect()->route('admin.dashboard');
-}
-
-return redirect()->route('dashboard');
-
+        return redirect(route('dashboard', absolute: false));
     }
 }
