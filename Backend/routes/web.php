@@ -26,6 +26,10 @@ Route::middleware(['auth'])->group(function() {
 
 });
 
+Route::get('/policy', function () {
+    return view('policy'); // make sure you have resources/views/policy.blade.php
+})->name('policy');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

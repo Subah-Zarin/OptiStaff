@@ -21,7 +21,8 @@
                     ['label' => 'My leave', 'url' =>  route('leave.index')],
                     ['label' => 'Holiday', 'url' => route('leave.holidays')]
                 ]],
-                ['label' => 'Policies', 'icon' => 'document-text', 'url' => '#'],
+                ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
+
                 ['label' => 'Settings', 'icon' => 'cog', 'url' => '#'],
             ];
         @endphp
