@@ -5,6 +5,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SettingsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,9 +28,13 @@ Route::middleware(['auth'])->group(function() {
 });
 
 Route::get('/policy', function () {
-    return view('policy'); // make sure you have resources/views/policy.blade.php
-})->name('policy');
+    return view('policy',['pageTitle' => 'Policies']); // make sure you have resources/views/policy.blade.php
+})->middleware(['auth'])->name('policy');
 
+
+Route::get('/settings', [SettingsController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('settings');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
