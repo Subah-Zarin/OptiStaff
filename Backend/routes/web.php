@@ -1,32 +1,36 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\EmployeeController; 
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {    
+Route::get('/', function () {
     return view('welcome');
 });
 
-// Dashboard route
 Route::get('/dashboard', function () {
     return view('dashboard.dashboard'); 
 })->middleware(['auth'])->name('dashboard');
 
-// Authenticated routes
-Route::middleware(['auth'])->group(function () {
+Route::resource('attendance', AttendanceController::class);
 
-    // Profile routes
+Route::middleware(['auth'])->group(function() {
+    Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');
+    Route::get('/leave/request', [LeaveController::class, 'create'])->name('leave.create');
+    Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
+    Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.cancel');
+    Route::view('/leave/holidays', 'Leave.holiday')->name('leave.holidays');
+
+});
+
+
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Employees
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
-
-    // Attendance (all resource routes)
-    Route::resource('attendance', AttendanceController::class);
 });
 
 require __DIR__.'/auth.php';

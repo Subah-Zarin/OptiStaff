@@ -45,7 +45,7 @@ class AttendanceController extends Controller
             'notes' => $request->notes,
         ]);
 
-        return redirect()->route('attendance')->with('success', 'Attendance added successfully.');
+        return redirect()->route('attendance.index')->with('success', 'Attendance added successfully.');
     }
 
     // Show form to edit attendance
@@ -74,7 +74,7 @@ class AttendanceController extends Controller
             'notes' => $request->notes,
         ]);
 
-        return redirect()->route('attendance')->with('success', 'Attendance updated successfully.');
+        return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
     }
 
     // Delete attendance
@@ -82,6 +82,6 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->delete();
-        return redirect()->route('attendance')->with('success', 'Attendance deleted.');
+         return redirect()->route('attendance.index')->with('success', 'Attendance deleted.');
     }
 }
