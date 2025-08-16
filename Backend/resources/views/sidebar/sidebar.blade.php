@@ -15,10 +15,11 @@
             $menu = [
                 ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('dashboard')],
                 ['label' => 'Employees', 'icon' => 'user-group', 'url' => route('employees.index')],
-                ['label' => 'Attendence', 'icon' => 'clipboard-list', 'url' => '#'],
+                ['label' => 'Attendance', 'icon' => 'clipboard-list', 'url' => route('attendance.index')],
+
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [
-                    ['label' => 'My leave', 'url' => '#'],
-                    ['label' => 'Holiday', 'url' => '#']
+                    ['label' => 'My leave', 'url' =>  route('leave.index')],
+                    ['label' => 'Holiday', 'url' => route('leave.holidays')]
                 ]],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => '#'],
                 ['label' => 'Settings', 'icon' => 'cog', 'url' => '#'],
