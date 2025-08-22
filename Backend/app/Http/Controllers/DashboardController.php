@@ -14,19 +14,19 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         // Attendance data
-        $presentDays = Attendance::where('employee_id', $user->id)
-                            ->where('status', 'Present')
-                            ->count();
+        $presentDays = Attendance::where('user_id', $user->id)
+                        ->where('status', 'Present')
+                        ->count();
 
-        $lateDays = Attendance::where('employee_id', $user->id)
+        $lateDays = Attendance::where('user_id', $user->id)
                         ->where('status', 'Late')
                         ->count();
 
-        $absentDays = Attendance::where('employee_id', $user->id)
-                            ->where('status', 'Absent')
-                            ->count();
+        $absentDays = Attendance::where('user_id', $user->id)
+                        ->where('status', 'Absent')
+                        ->count();
 
-        // Leave summary
+        // Leave summary grouped by leave type
         $leaveSummary = Leave::where('user_id', $user->id)
                         ->get()
                         ->groupBy('leave_type')
@@ -49,22 +49,25 @@ class DashboardController extends Controller
                         ->where('status', 'Approved')
                         ->count();
 
-        // Example: Attendance for chart (Mon-Fri)
+        // Example attendance chart data (Mon-Fri)
         $attendanceData = [
-            'Mon' => 1,
-            'Tue' => 1,
-            'Wed' => 0,
-            'Thu' => 1,
-            'Fri' => 1,
+            'Mon' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek())->where('status', 'Present')->count(),
+            'Tue' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek()->addDay(1))->where('status', 'Present')->count(),
+            'Wed' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek()->addDay(2))->where('status', 'Present')->count(),
+            'Thu' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek()->addDay(3))->where('status', 'Present')->count(),
+            'Fri' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek()->addDay(4))->where('status', 'Present')->count(),
         ];
 
-        // Example: Leave chart data
+        // Leave type counts
         $casualLeave = Leave::where('user_id', $user->id)
-                        ->where('leave_type', 'Casual')->count();
+                        ->where('leave_type', 'Casual')
+                        ->count();
         $sickLeave = Leave::where('user_id', $user->id)
-                        ->where('leave_type', 'Sick')->count();
+                        ->where('leave_type', 'Sick')
+                        ->count();
         $otherLeave = Leave::where('user_id', $user->id)
-                        ->where('leave_type', 'Other')->count();
+                        ->where('leave_type', 'Other')
+                        ->count();
 
         // Example: Employee type distribution (replace with real data)
         $fullTime = 400;

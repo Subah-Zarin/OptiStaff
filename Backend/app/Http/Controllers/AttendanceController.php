@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // your users table is employees
+use App\Models\User;
 use App\Models\Attendance;
 
 class AttendanceController extends Controller
@@ -13,9 +13,9 @@ class AttendanceController extends Controller
     {
         $employees = User::all();
 
-        $attendances = Attendance::with('employee')
+        $attendances = Attendance::with('user')
             ->when($request->date, fn($query) => $query->whereDate('date', $request->date))
-            ->when($request->employee, fn($query) => $query->where('employee_id', $request->employee))
+            ->when($request->employee, fn($query) => $query->where('user_id', $request->employee))
             ->paginate(10);
 
         return view('attendance', compact('attendances', 'employees'));
@@ -32,18 +32,13 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'employee_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
             'date' => 'required|date',
             'status' => 'required|in:Present,Absent,Leave',
             'notes' => 'nullable|string',
         ]);
 
-        Attendance::create([
-            'employee_id' => $request->employee_id,
-            'date' => $request->date,
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ]);
+        Attendance::create($request->only(['user_id', 'date', 'status', 'notes']));
 
         return redirect()->route('attendance.index')->with('success', 'Attendance added successfully.');
     }
@@ -60,19 +55,14 @@ class AttendanceController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'employee_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
             'date' => 'required|date',
             'status' => 'required|in:Present,Absent,Leave',
             'notes' => 'nullable|string',
         ]);
 
         $attendance = Attendance::findOrFail($id);
-        $attendance->update([
-            'employee_id' => $request->employee_id,
-            'date' => $request->date,
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ]);
+        $attendance->update($request->only(['user_id', 'date', 'status', 'notes']));
 
         return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
     }
@@ -82,6 +72,7 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->delete();
-         return redirect()->route('attendance.index')->with('success', 'Attendance deleted.');
+ 
+        return redirect()->route('attendance.index.index')->with('success', 'Attendance deleted.');
     }
 }

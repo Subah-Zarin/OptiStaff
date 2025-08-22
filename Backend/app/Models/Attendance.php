@@ -15,11 +15,11 @@ class Attendance extends Model
         'status',
         'check_in',
         'check_out',
+        'worked_hours',
     ];
 
-    // If Attendance belongs to an Employee
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(User::class);
     }
 }

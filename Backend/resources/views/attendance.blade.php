@@ -9,9 +9,9 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Employee Attendance</h1>
         <a href="{{ route('attendance.create') }}" 
-   class="bg-blue-300 text-black px-3 py-1.5 rounded-md shadow hover:bg-blue-400 transition duration-200 flex items-center text-sm">
-    <i class="fas fa-plus mr-1"></i> Add Attendance
-</a>
+           class="bg-blue-300 text-black px-3 py-1.5 rounded-md shadow hover:bg-blue-400 transition duration-200 flex items-center text-sm">
+            <i class="fas fa-plus mr-1"></i> Add Attendance
+        </a>
     </div>
 
     <!-- Filter Form -->
@@ -45,8 +45,10 @@
             <tbody>
                 @forelse($attendances as $index => $attendance)
                     <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4 border-b">{{ $index + 1 + ($attendances->currentPage() - 1) * $attendances->perPage() }}</td>
-                        <td class="py-2 px-4 border-b">{{ $attendance->employee->name }}</td>
+                        <td class="py-2 px-4 border-b">
+                            {{ $index + 1 + ($attendances->currentPage() - 1) * $attendances->perPage() }}
+                        </td>
+                        <td class="py-2 px-4 border-b">{{ $attendance->user->name }}</td>
                         <td class="py-2 px-4 border-b">{{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}</td>
                         <td class="py-2 px-4 border-b">
                             @php
