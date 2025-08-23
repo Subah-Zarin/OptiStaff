@@ -16,8 +16,10 @@ class AttendanceController extends Controller
         $attendances = Attendance::with('user')
             ->when($request->date, fn($query) => $query->whereDate('date', $request->date))
             ->when($request->employee, fn($query) => $query->where('user_id', $request->employee))
+            ->orderBy('date', 'desc')
             ->paginate(10);
 
+        // Fixed: point to the existing Blade file
         return view('attendance', compact('attendances', 'employees'));
     }
 
@@ -38,7 +40,12 @@ class AttendanceController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        Attendance::create($request->only(['user_id', 'date', 'status', 'notes']));
+        Attendance::create([
+            'user_id' => $request->user_id,
+            'date' => $request->date,
+            'status' => $request->status,
+            'notes' => $request->notes,
+        ]);
 
         return redirect()->route('attendance.index')->with('success', 'Attendance added successfully.');
     }
@@ -62,7 +69,12 @@ class AttendanceController extends Controller
         ]);
 
         $attendance = Attendance::findOrFail($id);
-        $attendance->update($request->only(['user_id', 'date', 'status', 'notes']));
+        $attendance->update([
+            'user_id' => $request->user_id,
+            'date' => $request->date,
+            'status' => $request->status,
+            'notes' => $request->notes,
+        ]);
 
         return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
     }
@@ -72,7 +84,7 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->delete();
- 
-        return redirect()->route('attendance.index.index')->with('success', 'Attendance deleted.');
+
+        return redirect()->route('attendance.index')->with('success', 'Attendance deleted.');
     }
 }
