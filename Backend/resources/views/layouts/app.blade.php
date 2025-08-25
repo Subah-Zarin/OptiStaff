@@ -10,6 +10,10 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+
 
     <!-- Scripts & Alpine.js -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,7 +25,36 @@
 <div x-data="{ open: true }" class="flex h-screen">
 
     <!-- Sidebar -->
-    @include('sidebar.sidebar')
+    <!-- Sidebar -->
+<aside class="h-screen w-20 bg-white border-r border-gray-200 fixed top-0 left-0 flex flex-col items-center py-4">
+    <div class="flex-1 flex flex-col gap-6 mt-10">
+        <a href="{{ route('admin.dashboard') }}" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs mt-1">Dashboard</span>
+        </a>
+
+        <a href="#" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-xs mt-1">Employees</span>
+        </a>
+
+        <a href="#" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+            <i class="fas fa-briefcase text-lg"></i>
+            <span class="text-xs mt-1">Clients</span>
+        </a>
+
+        <a href="#" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+            <i class="fas fa-tasks text-lg"></i>
+            <span class="text-xs mt-1">Projects</span>
+        </a>
+
+        <a href="#" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+            <i class="fas fa-file-alt text-lg"></i>
+            <span class="text-xs mt-1">Reports</span>
+        </a>
+    </div>
+</aside>
+
 
     <!-- Main content -->
     <div :class="open ? 'ml-64' : 'ml-20'" 

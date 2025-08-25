@@ -24,4 +24,13 @@ class AppServiceProvider extends ServiceProvider
             return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         });
     }
+    public static function redirectTo()
+{
+    $user = auth()->user();
+    if ($user && $user->role === 'admin') {
+        return '/admin/dashboard';
+    }
+    return '/home';
+}
+
 }
