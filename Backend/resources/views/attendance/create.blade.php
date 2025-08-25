@@ -19,20 +19,22 @@
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Employee</label>
-            <select name="employee_id" class="border rounded w-full px-3 py-2">
+            <select name="user_id" class="border rounded w-full px-3 py-2">
                 <option value="">Select Employee</option>
                 @foreach($employees as $emp)
-                    <option value="{{ $emp->id }}">{{ $emp->name }}</option>
+                    <option value="{{ $emp->id }}" {{ old('user_id') == $emp->id ? 'selected' : '' }}>
+                        {{ $emp->name }}
+                    </option>
                 @endforeach
             </select>
-            @error('employee_id')
+            @error('user_id')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Date</label>
-            <input type="date" name="date" class="border rounded w-full px-3 py-2">
+            <input type="date" name="date" value="{{ old('date') }}" class="border rounded w-full px-3 py-2">
             @error('date')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
@@ -41,9 +43,9 @@
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Status</label>
             <select name="status" class="border rounded w-full px-3 py-2">
-                <option value="Present">Present</option>
-                <option value="Absent">Absent</option>
-                <option value="Leave">Leave</option>
+                <option value="Present" {{ old('status') == 'Present' ? 'selected' : '' }}>Present</option>
+                <option value="Absent" {{ old('status') == 'Absent' ? 'selected' : '' }}>Absent</option>
+                <option value="Leave" {{ old('status') == 'Leave' ? 'selected' : '' }}>Leave</option>
             </select>
             @error('status')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -52,7 +54,7 @@
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Notes</label>
-            <textarea name="notes" class="border rounded w-full px-3 py-2" rows="3"></textarea>
+            <textarea name="notes" class="border rounded w-full px-3 py-2" rows="3">{{ old('notes') }}</textarea>
         </div>
 
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">

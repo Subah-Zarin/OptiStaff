@@ -12,33 +12,49 @@
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Employee</label>
-            <select name="employee_id" class="border rounded w-full px-3 py-2">
+            <select name="user_id" class="border rounded w-full px-3 py-2">
                 @foreach($employees as $emp)
-                    <option value="{{ $emp->id }}" {{ $attendance->employee_id == $emp->id ? 'selected' : '' }}>{{ $emp->name }}</option>
+                    <option value="{{ $emp->id }}" {{ $attendance->user_id == $emp->id ? 'selected' : '' }}>
+                        {{ $emp->name }}
+                    </option>
                 @endforeach
             </select>
+            @error('user_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Date</label>
-            <input type="date" name="date" value="{{ $attendance->date }}" class="border rounded w-full px-3 py-2">
+            <input type="date" name="date" value="{{ old('date', $attendance->date) }}" class="border rounded w-full px-3 py-2">
+            @error('date')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Status</label>
             <select name="status" class="border rounded w-full px-3 py-2">
-                <option value="Present" {{ $attendance->status == 'Present' ? 'selected' : '' }}>Present</option>
-                <option value="Absent" {{ $attendance->status == 'Absent' ? 'selected' : '' }}>Absent</option>
-                <option value="Leave" {{ $attendance->status == 'Leave' ? 'selected' : '' }}>Leave</option>
+                <option value="Present" {{ old('status', $attendance->status) == 'Present' ? 'selected' : '' }}>Present</option>
+                <option value="Absent" {{ old('status', $attendance->status) == 'Absent' ? 'selected' : '' }}>Absent</option>
+                <option value="Leave" {{ old('status', $attendance->status) == 'Leave' ? 'selected' : '' }}>Leave</option>
             </select>
+            @error('status')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">
             <label class="block mb-2 font-semibold">Notes</label>
-            <textarea name="notes" class="border rounded w-full px-3 py-2">{{ $attendance->notes }}</textarea>
+            <textarea name="notes" class="border rounded w-full px-3 py-2" rows="3">{{ old('notes', $attendance->notes) }}</textarea>
+            @error('notes')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
-        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update Attendance</button>
+        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+            Update Attendance
+        </button>
     </form>
 </div>
 @endsection
