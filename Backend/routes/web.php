@@ -6,6 +6,10 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,5 +42,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
 });
+
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
+
+// Admin dashboard
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
 
 require __DIR__.'/auth.php';
