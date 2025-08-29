@@ -12,7 +12,6 @@
         @if(auth()->user()->role === 'user')
             <div class="transition-all duration-300 flex-1 space-y-6">
 
-                <!-- Welcome Card -->
                 <div class="bg-white p-6 rounded-xl shadow-md flex justify-between items-center border-l-4 border-blue-500">
                     <div>
                         <h1 class="text-3xl font-semibold text-gray-800">Welcome, {{ $user->name }}!</h1>
@@ -23,7 +22,6 @@
                     </a>
                 </div>
 
-                <!-- KPI Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
                     <div class="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition border-l-4 border-green-500">
                         <p class="text-sm text-gray-500 font-medium">Present</p>
@@ -51,16 +49,13 @@
                     </div>
                 </div>
 
-                <!-- Charts Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
 
-                    <!-- Attendance Chart -->
                     <div class="bg-white p-6 rounded-xl shadow-md">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Weekly Attendance</h3>
                         <canvas id="attendanceChart" class="w-full h-64"></canvas>
                     </div>
 
-                    <!-- Leave Chart -->
                     <div class="bg-white p-6 rounded-xl shadow-md">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Leave Distribution</h3>
                         <canvas id="leaveChart" class="w-full h-64"></canvas>
@@ -68,7 +63,6 @@
 
                 </div>
 
-                <!-- Leave Summary Table -->
                 <div class="bg-white p-6 rounded-xl shadow-md mt-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Leave Summary</h3>
                     <div class="overflow-x-auto">
@@ -95,16 +89,13 @@
                     </div>
                 </div>
 
-              <!--Employee Type & Today Events -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
 
-    <!-- Employee Type Pie Chart -->
     <div class="bg-white p-6 rounded-xl shadow-md">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Employee Type Distribution</h3>
         <canvas id="employeePieChart" class="w-full h-64"></canvas>
     </div>
 
-    <!-- Today Events / Leaves (Static) -->
     <div class="bg-white p-6 rounded-xl shadow-md">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Today Events</h3>
         <ul class="space-y-3 text-gray-700">
@@ -128,7 +119,6 @@
         @endif
     </main>
 
-    <!-- Charts Script -->
     <script>
         // Attendance Line Chart
         const attendanceChart = new Chart(document.getElementById('attendanceChart'), {
