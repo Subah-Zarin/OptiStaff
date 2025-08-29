@@ -10,7 +10,8 @@ class EmployeeController extends Controller
     public function index()
     {
         
-        $employees = User::select('id', 'name', 'email', 'role', 'created_at', 'updated_at')->get();
+        // This query now only selects users with the 'user' role.
+        $employees = User::where('role', 'user')->select('id', 'name', 'email', 'role', 'created_at', 'updated_at')->get();
 
   
         return view('employee.Employee', compact('employees'));
