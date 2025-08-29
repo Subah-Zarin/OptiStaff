@@ -31,8 +31,15 @@ Route::middleware(['auth'])->group(function() {
 
 });
 
+// Admin view to see all leave requests
+Route::middleware(['auth'])->group(function () {
+    Route::get('/leave/leave_approvals', [LeaveController::class, 'approvals'])->name('leave.approvals');
+    Route::put('/leave/approve/{id}', [LeaveController::class, 'approve'])->name('leave.approve');
+    Route::put('/leave/reject/{id}', [LeaveController::class, 'reject'])->name('leave.reject');
+});
+
 Route::get('/policy', function () {
-    return view('policy'); // make sure you have resources/views/policy.blade.php
+    return view('policy'); 
 })->name('policy');
 
 
@@ -53,6 +60,9 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.admin_dashboard');
     })->name('admin.admin_dashboard');
 });
+
+
+
 
 
 require __DIR__.'/auth.php';

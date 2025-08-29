@@ -17,7 +17,7 @@
                 ['label' => 'Attendance', 'icon' => 'clipboard-list', 'url' => route('attendance.index')],
 
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [
-                    ['label' => 'Leave Requests', 'url' =>  route('leave.index')],
+                    ['label' => 'Leave Requests', 'url' =>  route('leave.approvals')],
                     ['label' => 'Holiday', 'url' => route('leave.holidays')]
                 ]],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],

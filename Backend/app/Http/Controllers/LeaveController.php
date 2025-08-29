@@ -89,4 +89,23 @@ class LeaveController extends Controller
         }
         return back()->with('error', 'Cannot cancel approved/rejected leave.');
     }
+
+    public function approvals() {
+    // Fetch all leave requests with user info
+    $leaves = Leave::with('user')->latest()->get();
+    return view('Leave.leave_approvals', compact('leaves'));
+}
+
+public function approve($id) {
+    $leave = Leave::findOrFail($id);
+    $leave->update(['status' => 'Approved']); // Capitalize for consistency
+    return back()->with('success', 'Leave approved successfully!');
+}
+
+public function reject($id) {
+    $leave = Leave::findOrFail($id);
+    $leave->update(['status' => 'Rejected']); // Capitalize for consistency
+    return back()->with('success', 'Leave rejected successfully!');
+}
+
 }
