@@ -11,7 +11,8 @@ class AttendanceController extends Controller
     // Display attendance list
     public function index(Request $request)
     {
-        $employees = User::all();
+        // Fetches only users with the 'user' role
+        $employees = User::where('role', 'user')->get();
 
         $attendances = Attendance::with('user')
             ->when($request->date, fn($query) => $query->whereDate('date', $request->date))
@@ -19,14 +20,14 @@ class AttendanceController extends Controller
             ->orderBy('date', 'desc')
             ->paginate(10);
 
-        // Fixed: point to the existing Blade file
         return view('attendance', compact('attendances', 'employees'));
     }
 
     // Show form to create attendance
     public function create()
     {
-        $employees = User::all();
+        // Fetches only users with the 'user' role for the dropdown
+        $employees = User::where('role', 'user')->get();
         return view('attendance.create', compact('employees'));
     }
 
@@ -54,7 +55,7 @@ class AttendanceController extends Controller
     public function edit($id)
     {
         $attendance = Attendance::findOrFail($id);
-        $employees = User::all();
+        $employees = User::where('role', 'user')->get();
         return view('attendance.edit', compact('attendance', 'employees'));
     }
 
