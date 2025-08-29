@@ -6,6 +6,6 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard'); // resources/views/admin/dashboard.blade.php
+        return view('admin.admin_dashboard'); // resources/views/admin/dashboard.blade.php
     }
 }

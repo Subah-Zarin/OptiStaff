@@ -4,50 +4,7 @@
 @section('content')
 <div class="flex min-h-screen bg-gray-100">
 
-    {{-- Sidebar --}}
-    <aside class="w-56 bg-white border-r">
-        <div class="p-4 text-xl font-bold text-blue-600">
-            Opti <span class="text-gray-700">Staff</span>
-        </div>
-        <nav class="mt-4 space-y-2">
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-home w-5 text-gray-500"></i>
-                <span class="ml-3">Dashboard</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-users w-5 text-gray-500"></i>
-                <span class="ml-3">Employees</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-user-tie w-5 text-gray-500"></i>
-                <span class="ml-3">Clients</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-tasks w-5 text-gray-500"></i>
-                <span class="ml-3">Projects</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-file-alt w-5 text-gray-500"></i>
-                <span class="ml-3">Policies</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-wallet w-5 text-gray-500"></i>
-                <span class="ml-3">Accounts</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-credit-card w-5 text-gray-500"></i>
-                <span class="ml-3">Payrolls</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-chart-line w-5 text-gray-500"></i>
-                <span class="ml-3">Reports</span>
-            </a>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-cog w-5 text-gray-500"></i>
-                <span class="ml-3">Settings</span>
-            </a>
-        </nav>
-    </aside>
+  
 
     {{-- Main Content --}}
     <div class="flex-1">
