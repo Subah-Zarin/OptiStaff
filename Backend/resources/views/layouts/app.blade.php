@@ -24,6 +24,8 @@
 
     @if(Auth::check() && Auth::user()->role === 'user')
         @include('sidebar.sidebar')
+    @elseif(Auth::check() && Auth::user()->role === 'admin')
+        @include('admin.admin_sidebar')
     @endif
 
     <div @if(Auth::check() && Auth::user()->role === 'user') :class="open ? 'ml-64' : 'ml-20'" @endif 
