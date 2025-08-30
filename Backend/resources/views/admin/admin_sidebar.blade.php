@@ -18,6 +18,7 @@
 
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [
                     ['label' => 'Leave Requests', 'url' =>  route('leave.approvals')],
+                     ['label' => 'Leave Status', 'url' =>  route('leave.leave_status')],
                     ['label' => 'Holiday', 'url' => route('leave.holidays')]
                 ]],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],

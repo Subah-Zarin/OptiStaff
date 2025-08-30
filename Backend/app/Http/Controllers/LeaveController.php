@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Leave;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class LeaveController extends Controller
 {
@@ -107,5 +110,67 @@ public function reject($id) {
     $leave->update(['status' => 'Rejected']); // Capitalize for consistency
     return back()->with('success', 'Leave rejected successfully!');
 }
+
+// Admin: leave status report (who’s on leave, returned, balances)
+    public function status()
+    {
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+
+        $today = now()->toDateString();
+        $approvedStatuses = ['Approved', 'approved'];
+
+        // Who is on leave today
+        $onLeaveToday = Leave::with('user')
+            ->whereIn('status', $approvedStatuses)
+            ->whereDate('from_date', '<=', $today)
+            ->whereDate('to_date', '>=', $today)
+            ->orderBy('from_date', 'desc')
+            ->get();
+
+        // Who recently returned (last 30 days)
+        $recentlyReturned = Leave::with('user')
+            ->whereIn('status', $approvedStatuses)
+            ->whereDate('to_date', '<', $today)
+            ->whereDate('to_date', '>=', now()->subDays(30)->toDateString())
+            ->orderBy('to_date', 'desc')
+            ->get();
+
+        // Totals per employee
+        $totalsUsed = Leave::select('user_id', DB::raw('SUM(number_of_days) as total_used'))
+            ->whereIn('status', $approvedStatuses)
+            ->groupBy('user_id')
+            ->get()
+            ->keyBy('user_id');
+
+        $users = User::select('id','name','email')->orderBy('name')->get();
+
+        // Organization entitlement (adjust if needed)
+        $totalEntitlement = 12 + 10 + 15; // 37 days
+
+        $summary = $users->map(function ($user) use ($totalsUsed, $totalEntitlement) {
+            $used = isset($totalsUsed[$user->id]) ? (float) $totalsUsed[$user->id]->total_used : 0.0;
+            $remaining = max($totalEntitlement - $used, 0);
+            return (object) [
+                'user'         => $user,
+                'used'         => $used,
+                'remaining'    => $remaining,
+                'entitlement'  => $totalEntitlement,
+                'used_percent' => $totalEntitlement > 0 ? round(($used / $totalEntitlement) * 100) : 0,
+            ];
+        });
+
+        $metrics = [
+            'totalEmployees'   => $users->count(),
+            'onLeaveToday'     => $onLeaveToday->count(),
+            'recentlyReturned' => $recentlyReturned->count(),
+            'totalDaysUsedOrg' => (float) $totalsUsed->sum('total_used'),
+            'totalEntitlement' => $totalEntitlement,
+        ];
+
+        return view('Leave.leave_status', compact('onLeaveToday', 'recentlyReturned', 'summary', 'metrics'));
+    }
+
 
 }

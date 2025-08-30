@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
     Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.cancel');
     Route::view('/leave/holidays', 'Leave.holiday')->name('leave.holidays');
+    
 
 });
 
@@ -36,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/leave/leave_approvals', [LeaveController::class, 'approvals'])->name('leave.approvals');
     Route::put('/leave/approve/{id}', [LeaveController::class, 'approve'])->name('leave.approve');
     Route::put('/leave/reject/{id}', [LeaveController::class, 'reject'])->name('leave.reject');
+     Route::get('/leave_status', [LeaveController::class, 'status'])->name('leave.leave_status');
 });
 
 Route::get('/policy', function () {
