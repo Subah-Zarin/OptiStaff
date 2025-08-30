@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Assuming sidebar takes col-2 -->
-        <div class="col-lg-10 offset-lg-2 py-4">
+        <div class="col-lg-10 offset-lg-0 py-4">
             <h2 class="fw-bold mb-4">Employee Leave Requests</h2>
 
             @if(session('success'))
