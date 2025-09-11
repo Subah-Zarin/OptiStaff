@@ -48,7 +48,7 @@
                         <td class="py-2 px-4 border-b">
                             {{ $index + 1 + ($attendances->currentPage() - 1) * $attendances->perPage() }}
                         </td>
-                        <td class="py-2 px-4 border-b">{{ $attendance->user->name }}</td>
+                        <td class="py-2 px-4 border-b">{{ $attendance->user?->name ?? '—' }}</td>
                         <td class="py-2 px-4 border-b">{{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}</td>
                         <td class="py-2 px-4 border-b">
                             @php

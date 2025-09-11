@@ -8,6 +8,7 @@ use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HolidayController;
 
 
 
@@ -27,7 +28,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/leave/request', [LeaveController::class, 'create'])->name('leave.create');
     Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
     Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.cancel');
-    Route::view('/leave/holidays', 'Leave.holiday')->name('leave.holidays');
+    Route::get('/leave/holidays', [HolidayController::class, 'employeeIndex'])->name('leave.holidays');
     
 
 });
@@ -58,12 +59,17 @@ Route::get('/home', function () {
 
 // Admin dashboard
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/admin_dashboard', function () {
-        return view('admin.admin_dashboard');
-    })->name('admin.admin_dashboard');
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 });
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/holidays', [HolidayController::class, 'index'])->name('holidays.index');
+    Route::post('/holidays', [HolidayController::class, 'store'])->name('holidays.store');
+    Route::put('/holidays/{holiday}', [HolidayController::class, 'update'])->name('holidays.update');
+    Route::delete('/holidays/{holiday}', [HolidayController::class, 'destroy'])->name('holidays.destroy');
+});
 
 
 
