@@ -12,13 +12,14 @@
     <nav class="flex-1 mt-4 space-y-2">
         @php
             $menu = [
-                ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('admin.admin_dashboard')],
+                ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('admin.dashboard')],
                 ['label' => 'Employees', 'icon' => 'user-group', 'url' => route('employees.index')],
                 ['label' => 'Attendance', 'icon' => 'clipboard-list', 'url' => route('attendance.index')],
 
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [
-                    ['label' => 'Leave Requests', 'url' =>  route('leave.index')],
-                    ['label' => 'Holiday', 'url' => route('leave.holidays')]
+                    ['label' => 'Leave Requests', 'url' =>  route('leave.approvals')],
+                     ['label' => 'Leave Status', 'url' =>  route('leave.leave_status')],
+                    ['label' => 'Holiday', 'url' => route('holidays.index')]
                 ]],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
 

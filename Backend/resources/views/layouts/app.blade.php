@@ -28,7 +28,7 @@
         @include('admin.admin_sidebar')
     @endif
 
-    <div @if(Auth::check() && Auth::user()->role === 'user') :class="open ? 'ml-64' : 'ml-20'" @endif 
+    <div @if(Auth::check()) :class="open ? 'ml-64' : 'ml-20'" @endif 
          class="flex-1 transition-all duration-300 overflow-y-auto">
 
         @include('layouts.navigation')

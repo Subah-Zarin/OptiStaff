@@ -19,8 +19,10 @@ class Leave extends Model
         'number_of_days',
         'status',
     ];
-
+    
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
+
+
 }
