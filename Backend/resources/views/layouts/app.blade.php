@@ -21,7 +21,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
-</head>
+</head> 
+
+
 
 <body class="font-sans antialiased bg-gray-100">
 <div x-data="{ open: true }" class="flex h-screen">

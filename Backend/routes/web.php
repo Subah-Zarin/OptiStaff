@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,7 +18,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 
 Route::resource('attendance', AttendanceController::class);
-
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/hr-chat', [ChatController::class, 'index'])->name('hr.chat');
+    Route::post('/hr-chat/ask', [ChatController::class, 'ask'])->name('hr.chat.ask');
+});
 Route::middleware(['auth'])->group(function() {
     Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');
     Route::get('/leave/request', [LeaveController::class, 'create'])->name('leave.create');
