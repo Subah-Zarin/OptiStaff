@@ -5,16 +5,28 @@
 @section('content')
 <div class="container mx-auto px-4 py-6">
 
-    <!-- Page Header -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">Employee Attendance</h1>
-        <a href="{{ route('attendance.create') }}" 
+        <a href="{{ route('attendance.create') }}"
            class="bg-blue-300 text-black px-3 py-1.5 rounded-md shadow hover:bg-blue-400 transition duration-200 flex items-center text-sm">
             <i class="fas fa-plus mr-1"></i> Add Attendance
         </a>
     </div>
 
-    <!-- Filter Form -->
+    {{-- Session Messages --}}
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+
+
     <form method="GET" action="{{ route('attendance.index') }}" class="flex flex-wrap gap-4 mb-6 justify-center">
         <input type="date" name="date" value="{{ request('date') }}" class="border rounded px-3 py-2">
         <select name="employee" class="border rounded px-3 py-2">
@@ -29,7 +41,6 @@
         <a href="{{ route('attendance.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Reset</a>
     </form>
 
-    <!-- Attendance Table -->
     <div class="bg-white rounded-lg shadow overflow-x-auto mx-auto">
         <table class="min-w-full border border-gray-200 text-left">
             <thead class="bg-gray-100">
@@ -81,7 +92,6 @@
         </table>
     </div>
 
-    <!-- Pagination -->
     <div class="mt-4 flex justify-center">
         {{ $attendances->links() }}
     </div>

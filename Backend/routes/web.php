@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceLockController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -21,7 +22,17 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth');
 
 
+Route::get('/attendance-report', [AttendanceController::class, 'report'])->name('attendance.report');
+
+// New Attendance Locking Routes (Admin Only)
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/attendance/lock', [AttendanceLockController::class, 'index'])->name('attendance.lock.index');
+    Route::post('/attendance/lock', [AttendanceLockController::class, 'store'])->name('attendance.lock.store');
+    Route::delete('/attendance/unlock', [AttendanceLockController::class, 'destroy'])->name('attendance.lock.destroy');
+});
+
 Route::resource('attendance', AttendanceController::class);
+
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');
@@ -29,7 +40,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
     Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.cancel');
     Route::get('/leave/holidays', [HolidayController::class, 'employeeIndex'])->name('leave.holidays');
-    
+
 
 });
 
@@ -42,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/policy', function () {
-    return view('policy'); 
+    return view('policy');
 })->name('policy');
 
 
@@ -53,15 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
 });
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
-
 // Admin dashboard
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -16,6 +16,7 @@ class Attendance extends Model
         'check_in',
         'check_out',
         'worked_hours',
+        'notes', // Add this line
     ];
 
     public function user()

@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendanceLock;
+use App\Models\Leave;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Attendance;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
+    private function isLocked($date)
+    {
+        $lock = AttendanceLock::where('lock_date', '=', date('Y-m-01', strtotime($date)))->first();
+        return $lock && $lock->is_locked;
+    }
+
     // Display attendance list
     public function index(Request $request)
     {
@@ -36,20 +45,32 @@ class AttendanceController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'date' => 'required|date',
+            'date' => 'required|date|date_equals:today', // Rule updated
             'status' => 'required|in:Present,Absent,Leave',
             'notes' => 'nullable|string',
         ]);
 
-        Attendance::create([
-            'user_id' => $request->user_id,
-            'date' => $request->date,
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ]);
+        if ($this->isLocked($request->date)) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot add attendance. The period is locked.');
+        }
+
+        // Prevent attendance marking on a leave day
+        $isOnLeave = Leave::where('user_id', $request->user_id)
+            ->where('status', 'Approved')
+            ->where('from_date', '<=', $request->date)
+            ->where('to_date', '>=', $request->date)
+            ->exists();
+
+        if ($isOnLeave) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot mark attendance, the employee is on leave.');
+        }
+
+
+        Attendance::create($request->all());
 
         return redirect()->route('attendance.index')->with('success', 'Attendance added successfully.');
     }
+
 
     // Show form to edit attendance
     public function edit($id)
@@ -69,23 +90,57 @@ class AttendanceController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        if ($this->isLocked($request->date)) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot update attendance. The period is locked.');
+        }
+
+        // Prevent attendance marking on a leave day
+        $isOnLeave = Leave::where('user_id', $request->user_id)
+            ->where('status', 'Approved')
+            ->where('from_date', '<=', $request->date)
+            ->where('to_date', '>=', $request->date)
+            ->exists();
+
+        if ($isOnLeave) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot update attendance, the employee is on leave.');
+        }
+
         $attendance = Attendance::findOrFail($id);
-        $attendance->update([
-            'user_id' => $request->user_id,
-            'date' => $request->date,
-            'status' => $request->status,
-            'notes' => $request->notes,
-        ]);
+        $attendance->update($request->all());
 
         return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
     }
+
 
     // Delete attendance
     public function destroy($id)
     {
         $attendance = Attendance::findOrFail($id);
+        if ($this->isLocked($attendance->date)) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot delete attendance. The period is locked.');
+        }
+
         $attendance->delete();
 
         return redirect()->route('attendance.index')->with('success', 'Attendance deleted.');
+    }
+
+    public function report()
+    {
+        $employees = User::where('role', 'user')
+            ->withCount([
+                'attendances as present_days' => fn ($query) => $query->where('status', 'Present'),
+                'attendances as absent_days' => fn ($query) => $query->where('status', 'Absent'),
+                'attendances as leave_days' => fn ($query) => $query->where('status', 'Leave'),
+            ])
+            ->get();
+
+        $employees->each(function ($employee) {
+            $employee->performance_score = ($employee->present_days * 2) - ($employee->absent_days * 3);
+        });
+
+        $sortedEmployees = $employees->sortByDesc('performance_score');
+
+        return view('attendance.report', ['employees' => $sortedEmployees]);
     }
 }

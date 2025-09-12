@@ -15,9 +15,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             $table->date('date');
-            $table->enum('status', ['present', 'absent', 'late', 'half_day', 'leave'])->default('present');
+            $table->string('status')->default('Present'); // Changed from enum to string
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();
+            $table->text('notes')->nullable(); // Added notes column
             $table->integer('worked_hours')->nullable();
 
             $table->timestamps();

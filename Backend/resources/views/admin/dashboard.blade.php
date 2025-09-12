@@ -1,28 +1,34 @@
-{{-- resources/views/admin/dashboard.blade.php --}}
-@extends('layouts.app') {{-- keep your login/register layout unchanged --}}
+@extends('layouts.app')
 
 @section('content')
 <div class="flex min-h-screen bg-gray-100">
-
-  
+    {{-- This div is for layout consistency, assuming sidebar is handled in app.blade.php --}}
 
     {{-- Main Content --}}
     <div class="flex-1">
-        {{-- Top Navbar --}}
-        <header class="flex justify-between items-center bg-white shadow px-6 py-4">
-            <h2 class="text-lg font-semibold">Dashboard</h2>
-            <div class="flex items-center space-x-4">
-                <span class="text-gray-600">tat</span>
-                <i class="fas fa-user-circle text-2xl text-gray-500"></i>
-            </div>
-        </header>
+        {{-- Top Navbar is handled by layouts.navigation --}}
 
         {{-- Dashboard Body --}}
         <main class="p-6">
-            <h3 class="text-xl font-bold mb-4">Welcome, John Doe!</h3>
-            <p class="text-gray-600 mb-6">Here’s your HR dashboard overview.</p>
+            <h3 class="text-xl font-bold mb-4">Welcome, Admin!</h3>
+            <p class="text-gray-600 mb-6">Here’s a summary of today's attendance.</p>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-green-500">
+                    <p class="text-sm text-gray-500 font-medium">Present Today</p>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-2">{{ $presentCount }}</h2>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-red-500">
+                    <p class="text-sm text-gray-500 font-medium">Absent Today</p>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-2">{{ $absentCount }}</h2>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-yellow-500">
+                    <p class="text-sm text-gray-500 font-medium">On Leave Today</p>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-2">{{ $leaveCount }}</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 <div class="bg-white p-4 rounded shadow">
                     <h4 class="text-center font-semibold mb-2">Total Employees</h4>
                     <canvas id="employeesChart"></canvas>
