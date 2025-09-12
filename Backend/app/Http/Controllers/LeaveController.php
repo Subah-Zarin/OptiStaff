@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Leave;
 use App\Models\User;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -102,6 +104,16 @@ class LeaveController extends Controller
 public function approve($id) {
     $leave = Leave::findOrFail($id);
     $leave->update(['status' => 'Approved']); // Capitalize for consistency
+
+    // Auto-mark attendance as 'Leave'
+    $period = CarbonPeriod::create($leave->from_date, $leave->to_date);
+    foreach ($period as $date) {
+        Attendance::updateOrCreate(
+            ['user_id' => $leave->user_id, 'date' => $date->toDateString()],
+            ['status' => 'Leave']
+        );
+    }
+
     return back()->with('success', 'Leave approved successfully!');
 }
 

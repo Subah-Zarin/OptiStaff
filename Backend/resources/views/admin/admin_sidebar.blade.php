@@ -1,20 +1,21 @@
-<aside 
-       :class="open ? 'w-64' : 'w-20'"  
+<aside
+       :class="open ? 'w-64' : 'w-20'"
        class="bg-white border-r border-gray-200 h-screen transition-all duration-300 flex flex-col shadow-sm fixed">
 
-    <!-- Logo -->
     <div class="flex items-center justify-center h-16 border-b border-gray-200">
         <span class="text-xl font-bold text-blue-600">Opti</span>
         <span x-show="open" class="ml-1 text-gray-800 font-semibold">Staff</span>
     </div>
 
-    <!-- Nav Links -->
     <nav class="flex-1 mt-4 space-y-2">
         @php
             $menu = [
                 ['label' => 'Dashboard', 'icon' => 'home', 'url' => route('admin.dashboard')],
                 ['label' => 'Employees', 'icon' => 'user-group', 'url' => route('employees.index')],
-                ['label' => 'Attendance', 'icon' => 'clipboard-list', 'url' => route('attendance.index')],
+                ['label' => 'Attendance', 'icon' => 'clipboard-list', 'url' => '#', 'sub' => [
+                    ['label' => 'Attendance Log', 'url' => route('attendance.index')],
+                    ['label' => 'Performance Report', 'url' => route('attendance.report')]
+                ]],
 
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [
                     ['label' => 'Leave Requests', 'url' =>  route('leave.approvals')],
@@ -84,7 +85,6 @@
         @endforeach
     </nav>
 
-    <!-- Toggle Button -->
     <button @click="open = !open" class="p-3 text-gray-500 hover:text-blue-600 transition mt-auto">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path :d="open ? 'M15 19l-7-7 7-7' : 'M9 5l7 7-7 7'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>

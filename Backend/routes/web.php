@@ -21,6 +21,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth');
 
 
+Route::get('/attendance-report', [AttendanceController::class, 'report'])->name('attendance.report');
 Route::resource('attendance', AttendanceController::class);
 
 Route::middleware(['auth'])->group(function() {
@@ -29,7 +30,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
     Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.cancel');
     Route::get('/leave/holidays', [HolidayController::class, 'employeeIndex'])->name('leave.holidays');
-    
+
 
 });
 
@@ -42,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/policy', function () {
-    return view('policy'); 
+    return view('policy');
 })->name('policy');
 
 
