@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendanceLock;
 use App\Models\Leave;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -10,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
+    private function isLocked($date)
+    {
+        $lock = AttendanceLock::where('lock_date', '=', date('Y-m-01', strtotime($date)))->first();
+        return $lock && $lock->is_locked;
+    }
+
     // Display attendance list
     public function index(Request $request)
     {
@@ -38,10 +45,14 @@ class AttendanceController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'date' => 'required|date',
-            'status' => 'required|in:Present,Absent,Leave', // 'Late' removed
+            'date' => 'required|date|date_equals:today', // Rule updated
+            'status' => 'required|in:Present,Absent,Leave',
             'notes' => 'nullable|string',
         ]);
+
+        if ($this->isLocked($request->date)) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot add attendance. The period is locked.');
+        }
 
         // Prevent attendance marking on a leave day
         $isOnLeave = Leave::where('user_id', $request->user_id)
@@ -75,9 +86,13 @@ class AttendanceController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'date' => 'required|date',
-            'status' => 'required|in:Present,Absent,Leave', // 'Late' removed
+            'status' => 'required|in:Present,Absent,Leave',
             'notes' => 'nullable|string',
         ]);
+
+        if ($this->isLocked($request->date)) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot update attendance. The period is locked.');
+        }
 
         // Prevent attendance marking on a leave day
         $isOnLeave = Leave::where('user_id', $request->user_id)
@@ -101,6 +116,10 @@ class AttendanceController extends Controller
     public function destroy($id)
     {
         $attendance = Attendance::findOrFail($id);
+        if ($this->isLocked($attendance->date)) {
+            return redirect()->route('attendance.index')->with('error', 'Cannot delete attendance. The period is locked.');
+        }
+
         $attendance->delete();
 
         return redirect()->route('attendance.index')->with('success', 'Attendance deleted.');
@@ -117,7 +136,6 @@ class AttendanceController extends Controller
             ->get();
 
         $employees->each(function ($employee) {
-            // 'late_days' calculation removed
             $employee->performance_score = ($employee->present_days * 2) - ($employee->absent_days * 3);
         });
 

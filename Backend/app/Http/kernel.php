@@ -22,8 +22,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        
-        // This line is the solution. It connects the alias 'admin' to the class.
-        'admin' => \App\Http\Middleware\AdminMiddleware::class,
+
+        // 'admin' => \App\Http\Middleware\AdminMiddleware::class, // You can remove this line
     ];
 }
