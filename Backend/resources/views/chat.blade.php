@@ -15,11 +15,11 @@
 <body>
     <h2>HR Analytics Chatbot</h2>
 
-    <form method="POST" action="{{ route('chat.ask') }}">
-        @csrf
-        <input type="text" name="query" placeholder="Ask HR Analytics..." style="width: 400px; padding: 8px;">
-        <button type="submit">Send</button>
-    </form>
+    <form method="POST" action="{{ route('hr.chat.ask') }}">
+    @csrf
+    <input type="text" name="query" placeholder="Ask HR Analytics..." style="width: 400px; padding: 8px;">
+    <button type="submit">Send</button>
+</form>
 
     @if(isset($query))
         <div class="chat-box">
@@ -35,27 +35,36 @@
                     <strong>Error:</strong> {{ $error }}
                 </div>
             @else
-                <div class="results">
-                    <strong>Results:</strong>
-                    <table>
-                        <thead>
-                            <tr>
-                                @foreach(array_keys((array)$results[0] ?? []) as $col)
-                                    <th>{{ $col }}</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($results as $row)
-                                <tr>
-                                    @foreach((array)$row as $value)
-                                        <td>{{ $value }}</td>
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                @php $firstRow = $results[0] ?? null; @endphp
+
+@if($firstRow)
+    <div class="results">
+        <strong>Results:</strong>
+        <table>
+            <thead>
+                <tr>
+                    @foreach(array_keys((array)$firstRow) as $col)
+                        <th>{{ $col }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($results as $row)
+                    <tr>
+                        @foreach((array)$row as $value)
+                            <td>{{ $value }}</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@else
+    <div class="results">
+        <strong>No results found.</strong>
+    </div>
+@endif
+
             @endif
         </div>
     @endif

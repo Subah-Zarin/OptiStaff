@@ -11,7 +11,7 @@ class RagChunk extends Model
     protected $table = 'rag_chunks';
     protected $fillable = ['source','chunk_index','content','embedding_json'];
     protected $keyType = 'string';
-    public $incrementing = false;
+    public $incrementing = false; 
 
     public function getEmbeddingAttribute(): array
     {

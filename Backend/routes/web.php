@@ -8,6 +8,8 @@ use App\Http\Controllers\AttendanceLockController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HolidayController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -65,6 +67,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     // AI HR Chatbot Routes - ADD THESE 2 LINES
     Route::get('/hr-chat', [ChatController::class, 'index'])->name('hr.chat');
+    
     Route::post('/hr-chat/ask', [ChatController::class, 'ask'])->name('hr.chat.ask');
 });
 

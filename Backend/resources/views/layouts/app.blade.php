@@ -19,6 +19,39 @@
     <script src="//unpkg.com/alpinejs" defer></script>
 </head> 
 
+{{-- AI Assistant Popup --}}
+<div id="aiChatPopup" 
+     class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-end justify-end z-50">
+    <div class="bg-white w-full max-w-md h-[80vh] rounded-t-xl shadow-xl flex flex-col animate-slide-up">
+        
+        {{-- Header --}}
+        <div class="flex justify-between items-center bg-purple-600 text-white px-4 py-2 rounded-t-xl">
+            <h2 class="font-bold">AI HR Assistant</h2>
+            <button onclick="toggleAiChat()" class="text-white hover:text-gray-200 text-xl">&times;</button>
+        </div>
+
+        {{-- Body (iframe loads hr.chat page) --}}
+        <iframe src="{{ route('hr.chat') }}" class="flex-1 w-full border-0"></iframe>
+    </div>
+</div>
+
+<script>
+    function toggleAiChat() {
+        const popup = document.getElementById("aiChatPopup");
+        popup.classList.toggle("hidden");
+    }
+</script>
+
+<style>
+    @keyframes slide-up {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-up {
+        animation: slide-up 0.3s ease-out;
+    }
+</style>
+
 
 
 <body class="font-sans antialiased bg-gray-100">

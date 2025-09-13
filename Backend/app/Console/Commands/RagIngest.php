@@ -5,7 +5,7 @@ use Illuminate\Console\Command;
 use Ramsey\Uuid\Uuid;
 use App\Models\RagChunk;
 use App\Support\Rag;
-
+ 
 class RagIngest extends Command
 {
     protected $signature = 'rag:ingest {--path=hr_docs} {--chunk=800} {--overlap=120}';
