@@ -11,7 +11,7 @@
         {{-- Dashboard Body --}}
         <main class="p-6">
             <h3 class="text-xl font-bold mb-4">Welcome, Admin!</h3>
-            <p class="text-gray-600 mb-6">Here’s a summary of today's attendance.</p>
+            <p class="text-gray-600 mb-6">Here's a summary of today's attendance.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-green-500">
@@ -25,6 +25,20 @@
                 <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-yellow-500">
                     <p class="text-sm text-gray-500 font-medium">On Leave Today</p>
                     <h2 class="text-3xl font-bold text-gray-800 mt-2">{{ $leaveCount }}</h2>
+                </div>
+            </div>
+
+            {{-- AI Assistant Card --}}
+            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-purple-500 mt-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">AI HR Assistant</p>
+                        <h2 class="text-xl font-bold text-gray-800 mt-2">Get Instant Insights</h2>
+                        <p class="text-sm text-gray-600 mt-1">Ask questions about attendance, leaves, and policies</p>
+                    </div>
+                    <a href="{{ route('hr.chat') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+                        Open AI Assistant
+                    </a>
                 </div>
             </div>
 

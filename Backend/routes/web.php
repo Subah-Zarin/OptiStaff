@@ -7,11 +7,9 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLockController;
 use App\Http\Controllers\LeaveController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HolidayController;
-
-
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,7 +30,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::resource('attendance', AttendanceController::class);
-
 
 Route::middleware(['auth'])->group(function() {
     Route::get('/leave', [LeaveController::class, 'index'])->name('leave.index');
@@ -67,6 +64,11 @@ Route::middleware('auth')->group(function () {
 // Admin dashboard
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    
+    // AI HR Chatbot Routes - ADD THESE 2 LINES
+    Route::get('/hr-chat', [ChatController::class, 'index'])->name('hr.chat');
+    
+    Route::post('/hr-chat/ask', [ChatController::class, 'ask'])->name('hr.chat.ask');
 });
 
 Route::middleware(['auth'])->group(function () {

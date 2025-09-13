@@ -23,6 +23,7 @@
                      ['label' => 'Leave Status', 'url' =>  route('leave.leave_status')],
                     ['label' => 'Holiday', 'url' => route('holidays.index')]
                 ]],
+                ['label' => 'AI Assistant', 'icon' => 'chat', 'url' => route('hr.chat')],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
 
                 ['label' => 'Settings', 'icon' => 'cog', 'url' => '#'],
