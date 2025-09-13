@@ -37,9 +37,15 @@ class EmployeeController extends Controller
     /**
      * Return JSON of all non-admin users for API.
      */
-    public function apiIndex()
-    {
-        $employees = User::where('role', '!=', 'admin')->get();
-        return response()->json($employees);
-    }
+   public function apiIndex()
+{
+    // Fetch all users except admin
+    $employees = User::where('role', '!=', 'admin')->get();
+
+    return response()->json([
+        'success' => true,
+        'data' => $employees
+    ]);
+}
+
 }
