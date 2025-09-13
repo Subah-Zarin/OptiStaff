@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Admin Dashboard')
 @section('content')
 <div class="flex min-h-screen bg-gray-100">
     {{-- This div is for layout consistency, assuming sidebar is handled in app.blade.php --}}
