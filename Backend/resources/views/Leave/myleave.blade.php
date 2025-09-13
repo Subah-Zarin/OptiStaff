@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'My Leave')
 @section('content')
 <div class="container mx-auto p-6">
     <!-- Page Header -->

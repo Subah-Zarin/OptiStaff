@@ -21,7 +21,7 @@
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [
                     ['label' => 'Leave Requests', 'url' =>  route('leave.approvals')],
                      ['label' => 'Leave Status', 'url' =>  route('leave.leave_status')],
-                    ['label' => 'Holiday', 'url' => route('holidays.index')]
+                    ['label' => 'Holiday Maneger', 'url' => route('holidays.index')]
                 ]],
                 ['label' => 'AI Assistant', 'icon' => 'chat', 'url' => route('hr.chat')],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
@@ -63,6 +63,12 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l.17.52a1.75 1.75 0 0 0 2.138 1.05l.518-.172c.921-.3 1.921.24 2.22 1.161l.19.585a1.75 1.75 0 0 0 1.052 1.137l.518.173c.921.3 1.221 1.299.5 2.04l-.435.392a1.75 1.75 0 0 0-.433 1.87l.174.518c.3.921-.24 1.921-1.16 2.22l-.585.19a1.75 1.75 0 0 0-1.137 1.052l-.173.518c-.3.921-1.299 1.221-2.04.5l-.392-.435a1.75 1.75 0 0 0-1.87-.433l-.518.174c-.921.3-1.921-.24-2.22-1.16l-.19-.585a1.75 1.75 0 0 0-1.052-1.137l-.518-.173c-.921-.3-1.221-1.299-.5-2.04l.435-.392a1.75 1.75 0 0 0 .433-1.87l-.174-.518c-.3-.921.24-1.921 1.16-2.22l.585-.19a1.75 1.75 0 0 0 1.137-1.052l.173-.518z" />
                             </svg>
                         @break
+                        @case('chat')
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.78-1.258L3 20l1.258-4.78A9.863 9.863 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                @break
                     @endswitch
 
                     <span x-show="open" class="ml-3">{{ $item['label'] }}</span>
