@@ -1,12 +1,12 @@
 # OptiStaff
 
-**A lightweight, AI-integrated HR management system built with React (frontend) and Laravel (backend).**
+**A lightweight, AI-integrated HR management system built with Laravel and Blade.**
 
 ---
 
 ## 📌 Project Overview
 
-**OptiStaff** is a modular and efficient HR dashboard tailored for small to medium-sized businesses. Designed with both HR personnel and employees in mind, it simplifies administrative tasks and improves workplace productivity. With built-in AI-powered utilities and a clean, responsive user interface, OptiStaff streamlines HR operations for a better employee experience.
+**OptiStaff** is a modular and efficient HR dashboard tailored for small to medium-sized businesses. Designed with both HR personnel and employees in mind, it simplifies administrative tasks and improves workplace productivity. With a built-in AI-powered chatbot and a clean, responsive user interface, OptiStaff streamlines HR operations for a better employee experience.
 
 ---
 
@@ -64,32 +64,21 @@ Track real-time coding progress:
 
 ### ⏱️ Attendance Management
 
-- Automatic tracking of employee login times
-- Centralized admin dashboard with access to detailed attendance logs and exportable reports
+- Track employee attendance (Present, Absent, Late, Leave)
+- Lock and unlock attendance periods for data integrity
+- Generate performance reports based on attendance data
 
 ### 🗓️ Leave Management
 
 - Submit, review, and approve leave requests
 - Integrated holiday calendar view
-- Leave type and policy management (Admin)
+- Manage company holidays (Admin)
 
-### 💰 Salary Management
+### 🤖 AI-Powered Features
 
-- Admins can configure and manage salary details
-- Optional salary slip export feature
+1. **AI HR Analytics Chatbot**
 
----
-
-## 🤖 AI-Powered Features
-
-1. **AI Chatbot Assistant (24/7)**
-
-   - Integrated virtual HR assistant for instant help
-
-2. **AI Interview Scheduling**
-   - Auto-scheduling based on calendar availability
-
----
+   - Integrated virtual HR assistant for instant insights on HR data using natural language queries
 
 ## 🔁 CRUD Operations
 
@@ -109,9 +98,9 @@ The system supports full **Create, Read, Update, Delete (CRUD)** operations:
 | Method | Endpoint             | Description                          |
 | ------ | -------------------- | ------------------------------------ |
 | GET    | `/api/attendance`    | Retrieve employee attendance logs    |
-| POST   | `/api/leave-request` | Submit new leave application         |
-| PUT    | `/api/salary/{id}`   | Update salary details (Admin)        |
-| DELETE | `/api/employee/{id}` | Remove employee profile (Admin only) |
+| POST   | `/leave`             | Submit new leave application         |
+| PUT    | `/holidays/{id}`     | Update holiday details (Admin).      |
+| DELETE | `/profile`           | Delete the user's account.           |
 
 ---
 
@@ -126,31 +115,29 @@ The system supports full **Create, Read, Update, Delete (CRUD)** operations:
 
 ### 🔙 Backend
 
-- **Laravel 8** (RESTful API)
-- **Sanctum** (Authentication)
-- **Mongodb** (Database)
-- **BotMan / OpenAI API** (AI Layer)
+- **Laravel** (MVC Framework)
+- **Blade** (Templating Engine)
+- **MySQL/MariaDB** (Database)
 
 ### 🌐 Frontend
 
-- **React.js**
-- **React Router**
-- **Axios** (API calls)
-- **TailwindCSS / Material UI (MUI)**
+- **HTML/CSS**
+- **JavaScript**
+- **Alpine.js**
+- **TailwindCSS**
 
 ### ⚙️ Rendering Method
 
-- **Client-Side Rendering (CSR)**  
-  Entire frontend rendered in the browser using React, consuming APIs from Laravel backend.
-
+- **Server-Side Rendering (SSR)**
+The entire frontend is rendered on the server using Laravel's Blade templating engine, with Alpine.js managing frontend interactivity. This approach ensures fast initial page loads and a tightly integrated system.
 ---
 
 ### 📷 Key Screens
 
 - Login & Registration
-- Personalized Employee Dashboard
-- Attendance Dashboard for Real-Time Tracking
-- Admin Dashboard with full control over users and data
+- ersonalized Employee Dashboard
+- Admin Dashboard with an overview of daily attendance and access to management features
+- Attendance and Leave Management pages
 
 ---
 
@@ -166,19 +153,30 @@ View the full design on Canva:
 ```
 
 optistaff/
-├── backend/             # Laravel 8 backend
-│   ├── app/
-│   ├── routes/
-│   └── ...
-├── frontend/            # React frontend
-│   ├── src/
-│   └── ...
-├── .env                 # Environment configurations
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   └── Middleware/
+│   ├── Models/
+│   └── Providers/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+├── routes/
+├── storage/
+├── tests/
+└── vendor/         
 └── README.md            # Project documentation
 
 ```
-
----
 
 ## 👩‍💻 Contributors
 
