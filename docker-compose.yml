@@ -3,13 +3,16 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./backend
+      context: ./Backend
       dockerfile: Dockerfile
     container_name: optistaff_backend
+    ports:
+      - "8000:8000" 
     restart: unless-stopped
     working_dir: /var/www
     volumes:
-      - ./backend:/var/www
+      - ./Backend/.env:/var/www/.env
+      - ./Backend/storage:/var/www/storage
     networks:
       - optistaff
     depends_on:
