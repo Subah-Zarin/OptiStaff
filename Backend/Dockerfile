@@ -1,5 +1,8 @@
 FROM php:8.2-apache
 
+# Set working directory
+WORKDIR /var/www
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpng-dev libjpeg-dev libfreetype6-dev zip git unzip curl libzip-dev \
@@ -17,11 +20,9 @@ COPY package*.json vite.config.js ./
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www
 
 # Copy backend code
-COPY Backend/. .
+COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
