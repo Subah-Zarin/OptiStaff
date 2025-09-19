@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Set working directory first
+# Set working directory
 WORKDIR /var/www
 
 # Install system dependencies
@@ -16,18 +16,18 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy composer.json & composer.lock for caching
-COPY composer.json composer.lock ./
+# Copy only composer files first (for caching)
+COPY Backend/composer.json Backend/composer.lock ./
 
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Copy frontend files and install npm dependencies
-COPY package*.json vite.config.js ./
+# Copy frontend dependencies config
+COPY Backend/package*.json Backend/vite.config.js ./
 RUN npm install && npm run build
 
 # Copy the rest of the backend code
-COPY . .
+COPY Backend/. .
 
 # Expose Laravel port
 EXPOSE 8000
