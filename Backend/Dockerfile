@@ -16,8 +16,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy backend code (build context is ./Backend)
-COPY . .
+# Copy only backend code (so composer.json is in /var/www)
+COPY Backend/ ./
 
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -29,5 +29,11 @@ RUN npm run build
 # Expose port
 EXPOSE 8000
 
-# Run migrations and start Laravel
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+# Wait for MySQL + migrate + serve
+CMD ["sh", "-c", "\
+  until php -r \"new PDO('mysql:host=db;port=3306', 'admin', 'hr799496106');\" 2>/dev/null; do \
+    echo 'Waiting for MySQL...'; sleep 2; \
+  done; \
+  php artisan migrate --force || true; \
+  php artisan serve --host=0.0.0.0 --port=8000 \
+"]

@@ -1,8 +1,8 @@
 services:
   backend:
     build:
-      context: ./Backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Backend/Dockerfile
     container_name: optistaff_backend
     ports:
       - "8000:8000"
