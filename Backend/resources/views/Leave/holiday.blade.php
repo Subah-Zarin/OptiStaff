@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Holiday')
 @section('content')
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-semibold text-gray-800 mb-6">Public Holidays in Bangladesh - 2025</h1>

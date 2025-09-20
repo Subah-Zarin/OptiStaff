@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Leave Status')
 @section('content')
 <div class="container-fluid px-4">
     <h2 class="my-4">Leave Status Dashboard</h2>
