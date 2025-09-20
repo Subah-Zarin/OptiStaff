@@ -13,7 +13,7 @@
 
 ---
 
-# Project Live Link: [Insert URL]
+# Project Live Link: [https://optistaff-production.up.railway.app/]
 # Recorded video: [Insert URL] (Optional)
 
 ---
@@ -177,24 +177,25 @@ php artisan serve
 | Component | Is Deployed? | Is Dockerized? | Unit Tests Added? (Optional)  | Is AI feature implemented? (Optional) |
 |-----------|--------------|----------------|------------------------------ |--------------------------             |
 | Backend   |    Yes       |         Yes    |  No                           | Yes                                   |
-| Frontend  |    Yes       |         Yes    |  No                            | Yes                                  |
+| Frontend  |    Yes       |         Yes    |  No                           | Yes                                   |
 
 ---
 
 
 ## 9. Contribution Table
 
-| Metric                       | Total | Backend | Frontend | Member 1 | Member 2 | Member 3 | Member 4 |
-|----------------------------- |-------|---------|----------|----------|----------|----------|----------|
-| Issues Solved                |       |         |          |          |          |          |          |
-| WakaTime Contribution (Hours)|       |         |          |          |          |          |          |
-| Percent Contribution (%)     |       |         |          |          |          |          |          |
+| Metric                       | Total | Backend | Frontend | Member 1   | Member 2    | Member 3   | Member 4   |
+|----------------------------- |-------|---------|----------|----------  |----------   |----------  |----------  |
+| Issues Solved                | 25    |   13    | 12       |11          |    2        |5           |   7        |
+| WakaTime Contribution (Hours)|106hrs | 53hrs   | 53hrs    |47hrs-30mins|15hrs-16mins |15hrs-20mins|27hrs-50mins|
+| Percent Contribution (%)     |100    |50%      |50%       |44%         |14%          |15%         |27%         |
 
 ---
 
 ## 10. Screenshots
 
-*Include screenshots or GIFs of the deployed application.*
+![Alt text](image.png) 
+![Alt text](image-1.png)
 
 ---
 
