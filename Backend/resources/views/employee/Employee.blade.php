@@ -19,7 +19,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
             </svg>
         </div>
-    </div>
+    </div> 
 
     <!-- Table -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -41,7 +41,7 @@
             </tbody>
         </table>
     </div>
-
+ 
     <!-- Pagination -->
     <div id="pagination" class="mt-4 flex justify-center space-x-2"></div>
 
@@ -94,20 +94,23 @@ document.addEventListener('DOMContentLoaded', function() {
             tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">No employees found.</td></tr>`;
         } else {
             tableBody.innerHTML = paginated.map(emp => `
-                <tr class="hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${emp.id}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">${emp.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${emp.email}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <span class="px-2 py-1 rounded-full text-xs font-semibold ${
-                            emp.role === 'admin' ? 'bg-red-100 text-red-800' :
-                            emp.role === 'manager' ? 'bg-green-100 text-green-800' :
-                            'bg-blue-100 text-blue-800'
-                        }">${emp.role ?? 'N/A'}</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${new Date(emp.created_at).toLocaleDateString()}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${new Date(emp.updated_at).toLocaleDateString()}</td>
-                </tr>
+                <tr
+        class="hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+        onclick="window.location.href = '{{ route('employees.show', '') }}/${emp.id}'"
+    >
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${emp.id}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">${emp.name}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${emp.email}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <span class="px-2 py-1 rounded-full text-xs font-semibold ${
+                emp.role === 'admin' ? 'bg-red-100 text-red-800' :
+                emp.role === 'manager' ? 'bg-green-100 text-green-800' :
+                'bg-blue-100 text-blue-800'
+            }">${emp.role ?? 'N/A'}</span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${new Date(emp.created_at).toLocaleDateString()}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${new Date(emp.updated_at).toLocaleDateString()}</td>
+    </tr>
             `).join('');
         }
 

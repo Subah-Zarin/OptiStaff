@@ -29,6 +29,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/attendance/unlock', [AttendanceLockController::class, 'destroy'])->name('attendance.lock.destroy');
 });
 
+// Route for the employee directory (index)
+Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
+
+// New Route for single employee details (show)
+// The {id} is a wildcard parameter that will be passed to the show($id) method
+Route::get('/employees/{id}', [EmployeeController::class, 'show'])->name('employees.show');
+
 Route::resource('attendance', AttendanceController::class);
 
 Route::middleware(['auth'])->group(function() {

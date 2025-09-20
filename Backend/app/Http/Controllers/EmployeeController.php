@@ -33,6 +33,14 @@ class EmployeeController extends Controller
 
         return view('employee.Employee', compact('employees', 'search', 'sortField', 'sortDirection'));
     }
+    public function show($id)
+{
+    // Find the employee by ID, or fail with a 404 if not found
+    $employee = User::findOrFail($id);
+
+    // Return a new blade view to display the employee details
+    return view('employee.show', compact('employee'));
+}
 
     /**
      * Return JSON of all non-admin users for API.
