@@ -11,28 +11,32 @@ class EmployeeController extends Controller
      * Show the employee Blade page with search, sort, and pagination.
      */
     public function index(Request $request)
-    {
-        $search = $request->input('search');
-        $sortField = $request->input('sortField', 'id');
-        $sortDirection = $request->input('sortDirection', 'asc');
+{
+    $query = User::query()->where('role', '!=', 'admin');
 
-        // Fetch employees (exclude admin if needed)
-        $employees = User::query()
-            ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%")
-                      ->orWhere('role', 'like', "%{$search}%");
-            })
-            ->orderBy($sortField, $sortDirection)
-            ->paginate(10)
-            ->appends([
-                'search' => $search,
-                'sortField' => $sortField,
-                'sortDirection' => $sortDirection,
-            ]);
-
-        return view('employee.Employee', compact('employees', 'search', 'sortField', 'sortDirection'));
+    // Search
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('email', 'like', "%{$search}%");
+        });
     }
+
+    // Sorting
+    $sortBy = $request->get('sort', 'id');
+    $direction = $request->get('direction', 'asc');
+    $allowedSorts = ['id', 'name', 'email', 'created_at', 'updated_at', 'role'];
+    if (!in_array($sortBy, $allowedSorts)) {
+        $sortBy = 'id';
+    }
+    $query->orderBy($sortBy, $direction);
+
+    // Pagination
+    $employees = $query->paginate(10)->appends($request->all());
+
+    return view('employee.Employee', compact('employees'));
+}
 
     /**
      * Return JSON of all non-admin users for API.
