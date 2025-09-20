@@ -26,7 +26,6 @@
                 ['label' => 'AI Assistant', 'icon' => 'chat', 'url' => route('hr.chat')],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
 
-                ['label' => 'Settings', 'icon' => 'cog', 'url' => '#'],
             ];
         @endphp
 

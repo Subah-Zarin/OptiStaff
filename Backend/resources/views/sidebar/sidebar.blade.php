@@ -22,8 +22,6 @@
                     ['label' => 'Holiday', 'url' => route('leave.holidays')]
                 ]],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
-
-                ['label' => 'Settings', 'icon' => 'cog', 'url' => '#'],
             ];
         @endphp
 
