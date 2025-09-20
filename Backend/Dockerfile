@@ -30,10 +30,4 @@ RUN npm run build
 EXPOSE 8000
 
 # Wait for MySQL + migrate + serve
-CMD ["sh", "-c", "\
-  until php -r \"new PDO('mysql:host=db;port=3306', 'admin', 'hr799496106');\" 2>/dev/null; do \
-    echo 'Waiting for MySQL...'; sleep 2; \
-  done; \
-  php artisan migrate --force || true; \
-  php artisan serve --host=0.0.0.0 --port=8000 \
-"]
+CMD ["sh", "-c", "php artisan db:check-migrate && php artisan serve --host=0.0.0.0 --port=8000"]
