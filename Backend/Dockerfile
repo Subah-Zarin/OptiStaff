@@ -1,33 +1,36 @@
-FROM php:8.2-apache
+# Start with the Bitnami Laravel image.
+FROM bitnami/laravel:10-debian-11
 
-# Set working directory
-WORKDIR /var/www
+# --- Install Node.js for the frontend build ---
+# Install curl to download the Node.js setup script
+USER root
+RUN apt-get update && apt-get install -y curl && apt-get clean
+# Set up and install Node.js v18
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs
+# Switch back to the non-root user
+#USER 1001
+# --- End Node.js Install ---
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg-dev libfreetype6-dev zip git unzip curl libzip-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql bcmath zip
+# Set the working directory
+WORKDIR /app
 
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
+# Copy your application code into the image
+COPY . .
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install your project's specific Composer dependencies
+RUN composer install --optimize-autoloader --no-dev
 
-# Copy only backend code (so composer.json is in /var/www)
-COPY Backend/ ./
-
-# Install PHP dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-# Install frontend dependencies
+# --- Frontend Build Steps ---
+# Install JavaScript dependencies
 RUN npm install
+# Build the production assets (this creates the manifest.json file)
 RUN npm run build
+# --- End Frontend Build ---
 
-# Expose port
-EXPOSE 8000
+# Create the specific directories Laravel needs for caching.
+RUN mkdir -p /app/storage/framework/views /app/bootstrap/cache
 
-# Wait for MySQL + migrate + serve
-CMD ["sh", "-c", "php artisan db:check-migrate && php artisan serve --host=0.0.0.0 --port=8000"]
+# This is a bitnami-specific step to ensure permissions are correct for ALL files,
+# including the new directories and the frontend build artifacts.
+RUN chown -R 1001:1001 /app
