@@ -11,7 +11,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+       $schedule->command('salary:generate')
+        ->monthlyOn(1, '00:05'); 
     }
 
     /**
@@ -23,6 +24,7 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+    
     
     /**
      * The Artisan commands provided by your application.

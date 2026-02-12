@@ -21,6 +21,7 @@
                     ['label' => 'My leave', 'url' =>  route('leave.index')],
                     ['label' => 'Holiday', 'url' => route('leave.holidays')]
                 ]],
+                ['label' => 'My Payments', 'icon' => 'currency-dollar', 'url' => route('employee.payments')],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
             ];
         @endphp
@@ -53,6 +54,19 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5l2 2h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z" />
                             </svg>
                         @break
+                        @case('currency-dollar')
+                           <svg xmlns="http://www.w3.org/2000/svg" 
+                                class="w-5 h-5" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                stroke="currentColor">
+                                <path stroke-linecap="round" 
+                                 stroke-linejoin="round" 
+                                 stroke-width="2" 
+                                 d="M12 8c-2.21 0-4 1.343-4 3s1.79 3 4 3 4 1.343 4 3-1.79 3-4 3m0-12v12" />
+                            </svg>
+                        @break
+
                         @case('cog')
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l.17.52a1.75 1.75 0 0 0 2.138 1.05l.518-.172c.921-.3 1.921.24 2.22 1.161l.19.585a1.75 1.75 0 0 0 1.052 1.137l.518.173c.921.3 1.221 1.299.5 2.04l-.435.392a1.75 1.75 0 0 0-.433 1.87l.174.518c.3.921-.24 1.921-1.16 2.22l-.585.19a1.75 1.75 0 0 0-1.137 1.052l-.173.518c-.3.921-1.299 1.221-2.04.5l-.392-.435a1.75 1.75 0 0 0-1.87-.433l-.518.174c-.921.3-1.921-.24-2.22-1.16l-.19-.585a1.75 1.75 0 0 0-1.052-1.137l-.518-.173c-.921-.3-1.221-1.299-.5-2.04l.435-.392a1.75 1.75 0 0 0 .433-1.87l-.174-.518c-.3-.921.24-1.921 1.16-2.22l.585-.19a1.75 1.75 0 0 0 1.137-1.052l.173-.518z" />

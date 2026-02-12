@@ -187,9 +187,8 @@ php artisan serve
 
 ## 10. Screenshots
 
-<img width="1910" height="908" alt="image" src="https://github.com/user-attachments/assets/94dcb34e-b7f3-4086-b3d7-b28d2ffe6c2a" />
-<img width="1910" height="902" alt="image" src="https://github.com/user-attachments/assets/5bed4afb-4f33-4c51-a82a-dcb8b8f8c856" />
-
+![alt text](image-1.png)
+![alt text](image-2.png)
 
 ---
 

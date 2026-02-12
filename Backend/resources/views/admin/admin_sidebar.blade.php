@@ -23,6 +23,7 @@
                      ['label' => 'Leave Status', 'url' =>  route('leave.leave_status')],
                     ['label' => 'Holiday Maneger', 'url' => route('holidays.index')]
                 ]],
+                ['label' => 'Payment Management', 'icon' => 'currency-dollar', 'url' => route('admin.payments.index')],
                 ['label' => 'AI Assistant', 'icon' => 'chat', 'url' => route('hr.chat')],
                 ['label' => 'Policies', 'icon' => 'document-text', 'url' => route('policy')],
 
@@ -55,6 +56,18 @@
                         @case('document-text')
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5l2 2h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z" />
+                            </svg>
+                        @break
+                            @case('currency-dollar')
+                           <svg xmlns="http://www.w3.org/2000/svg" 
+                                class="w-5 h-5" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                stroke="currentColor">
+                                <path stroke-linecap="round" 
+                                 stroke-linejoin="round" 
+                                 stroke-width="2" 
+                                 d="M12 8c-2.21 0-4 1.343-4 3s1.79 3 4 3 4 1.343 4 3-1.79 3-4 3m0-12v12" />
                             </svg>
                         @break
                         @case('cog')
