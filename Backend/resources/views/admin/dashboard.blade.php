@@ -1,85 +1,190 @@
 @extends('layouts.app')
-@section('title', 'Admin Dashboard')
+
 @section('content')
-<div class="flex min-h-screen bg-gray-100">
-    {{-- This div is for layout consistency, assuming sidebar is handled in app.blade.php --}}
+<div class="p-6 space-y-6">
 
-    {{-- Main Content --}}
-    <div class="flex-1">
-        {{-- Top Navbar is handled by layouts.navigation --}}
-
-        {{-- Dashboard Body --}}
-        <main class="p-6">
-            <h3 class="text-xl font-bold mb-4">Welcome, Admin!</h3>
-            <p class="text-gray-600 mb-6">Here's a summary of today's attendance.</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-green-500">
-                    <p class="text-sm text-gray-500 font-medium">Present Today</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-2">{{ $presentCount }}</h2>
-                </div>
-                <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-red-500">
-                    <p class="text-sm text-gray-500 font-medium">Absent Today</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-2">{{ $absentCount }}</h2>
-                </div>
-                <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-yellow-500">
-                    <p class="text-sm text-gray-500 font-medium">On Leave Today</p>
-                    <h2 class="text-3xl font-bold text-gray-800 mt-2">{{ $leaveCount }}</h2>
-                </div>
+    {{-- KPI Summary Row --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {{-- Total Leaves --}}
+        <div class="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition duration-300 flex items-center space-x-4">
+            <div class="p-3 bg-blue-100 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
             </div>
-
-            {{-- AI Assistant Card --}}
-            <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-purple-500 mt-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">AI HR Assistant</p>
-                        <h2 class="text-xl font-bold text-gray-800 mt-2">Get Instant Insights</h2>
-                        <p class="text-sm text-gray-600 mt-1">Ask questions about attendance, leaves, and policies</p>
-                    </div>
-                    <a href="{{ route('hr.chat') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition">
-                        Open AI Assistant
-                    </a>
-                </div>
+            <div>
+                <p class="text-gray-500 font-medium text-sm">Total Leaves This Month</p>
+                <h2 class="text-2xl font-bold">{{ $totalLeavesThisMonth }}</h2>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                <div class="bg-white p-4 rounded shadow">
-                    <h4 class="text-center font-semibold mb-2">Total Employees</h4>
-                    <canvas id="employeesChart"></canvas>
-                </div>
-                <div class="bg-white p-4 rounded shadow">
-                    <h4 class="text-center font-semibold mb-2">Total Projects</h4>
-                    <canvas id="projectsChart"></canvas>
-                </div>
+        {{-- Pending Approvals --}}
+        <div class="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition duration-300 flex items-center space-x-4">
+            <div class="p-3 bg-yellow-100 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
             </div>
-        </main>
+            <div>
+                <p class="text-gray-500 font-medium text-sm">Pending Approvals</p>
+                <h2 class="text-2xl font-bold">{{ $pendingApprovals }}</h2>
+            </div>
+        </div>
+
+        {{-- Payroll Ready --}}
+        <div class="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition duration-300 flex items-center space-x-4">
+            <div class="p-3 bg-green-100 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.86 0-7 1.79-7 4v4h14v-4c0-2.21-3.14-4-7-4z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v4" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-gray-500 font-medium text-sm">Payroll Ready</p>
+                <h2 class="text-2xl font-bold">{{ $payrollReady }}</h2>
+            </div>
+        </div>
+
+        {{-- Holidays Left --}}
+        <div class="bg-white p-5 rounded-xl shadow-md hover:shadow-lg transition duration-300 flex items-center space-x-4">
+            <div class="p-3 bg-red-100 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-7 8h4m-2-8v8" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-gray-500 font-medium text-sm">Holidays Left</p>
+                <h2 class="text-2xl font-bold">{{ $holidaysLeft }}</h2>
+            </div>
+        </div>
     </div>
-</div>
-@endsection
 
-@section('scripts')
+    {{-- Main Grid: Cards + Charts --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {{-- Attendance Card --}}
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Today's Attendance</h3>
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="text-center p-3 bg-blue-50 rounded-lg shadow">
+                    <p class="text-gray-500 text-sm">Present</p>
+                    <h2 class="text-2xl font-bold">{{ $presentCount }}</h2>
+                </div>
+                <div class="text-center p-3 bg-red-50 rounded-lg shadow">
+                    <p class="text-gray-500 text-sm">Absent</p>
+                    <h2 class="text-2xl font-bold">{{ $absentCount }}</h2>
+                </div>
+                <div class="text-center p-3 bg-yellow-50 rounded-lg shadow">
+                    <p class="text-gray-500 text-sm">On Leave</p>
+                    <h2 class="text-2xl font-bold">{{ $leaveCountToday }}</h2>
+                </div>
+            </div>
+
+            {{-- Attendance Chart --}}
+            <canvas id="attendanceChart" class="w-full h-64"></canvas>
+        </div>
+
+        {{-- Leave & Payroll Trends --}}
+        <div class="space-y-6">
+
+            {{-- Leave Trends Chart --}}
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Leave Trends (Last 6 Months)</h3>
+                <canvas id="leaveChart" class="w-full h-64"></canvas>
+            </div>
+
+            {{-- Payroll Overview Chart --}}
+            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Payroll Overview (Last 6 Months)</h3>
+                <canvas id="payrollChart" class="w-full h-64"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{-- Chart.js --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    new Chart(document.getElementById('employeesChart'), {
-        type: 'doughnut',
+    // Attendance Chart
+    const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(attendanceCtx, {
+        type: 'line',
         data: {
-            labels: ['Active', 'Inactive'],
-            datasets: [{
-                data: [90, 10],
-                backgroundColor: ['#3b82f6', '#ef4444']
-            }]
+            labels: @json($attendanceLabels),
+            datasets: [
+                {
+                    label: 'Present',
+                    data: @json($attendancePresent),
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    tension: 0.3,
+                },
+                {
+                    label: 'Absent',
+                    data: @json($attendanceAbsent),
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                    tension: 0.3,
+                },
+                {
+                    label: 'On Leave',
+                    data: @json($attendanceLeave),
+                    borderColor: '#facc15',
+                    backgroundColor: 'rgba(250, 204, 21, 0.2)',
+                    tension: 0.3,
+                },
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
+            scales: {
+                y: { beginAtZero: true, precision:0 },
+            }
         }
     });
 
-    new Chart(document.getElementById('projectsChart'), {
+    // Leave Chart
+    const leaveCtx = document.getElementById('leaveChart').getContext('2d');
+    new Chart(leaveCtx, {
         type: 'bar',
         data: {
-            labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            labels: @json($leaveLabels),
             datasets: [{
-                label: 'Projects',
-                data: [2,4,6,5,7,3,8,6,5,4,3,2],
-                backgroundColor: '#f59e0b'
+                label: 'Leaves',
+                data: @json($leaveCounts),
+                backgroundColor: '#3b82f6',
+                borderRadius: 6,
             }]
+        },
+        options: {
+            responsive: true,
+            plugins: { tooltip: { enabled: true }, legend: { display: false } },
+            scales: { y: { beginAtZero: true, precision:0 } }
+        }
+    });
+
+    // Payroll Chart
+    const payrollCtx = document.getElementById('payrollChart').getContext('2d');
+    new Chart(payrollCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($payrollLabels),
+            datasets: [{
+                label: 'Payroll',
+                data: @json($payrollCounts),
+                backgroundColor: '#10b981',
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { tooltip: { enabled: true }, legend: { display: false } },
+            scales: { y: { beginAtZero: true, precision:0 } }
         }
     });
 </script>
