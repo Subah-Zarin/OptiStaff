@@ -63,7 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
 });
-
+Route::get('/employees/{user}', [EmployeeController::class, 'show'])->name('employees.show');
+Route::get('/employees/{id}/download', [EmployeeController::class, 'download'])->name('employees.download');
 // Admin dashboard
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');

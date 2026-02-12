@@ -39,7 +39,14 @@
                 @forelse($employees as $emp)
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-6 py-4 text-gray-700">{{ $emp->id }}</td>
-                        <td class="px-6 py-4 text-gray-700">{{ $emp->name }}</td>
+
+                        <!-- Name is now a clickable link -->
+                        <td class="px-6 py-4 text-blue-600 hover:underline cursor-pointer">
+                            <a href="{{ route('employees.show', $emp->id) }}">
+                                {{ $emp->name }}
+                            </a>
+                        </td>
+
                         <td class="px-6 py-4 text-gray-700">{{ $emp->email }}</td>
                         <td class="px-6 py-4 text-gray-700">
                             <span class="px-2 py-1 rounded-full text-xs font-semibold

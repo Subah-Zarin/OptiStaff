@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -50,6 +51,18 @@ class EmployeeController extends Controller
         'success' => true,
         'data' => $employees
     ]);
+}
+ public function show(User $user)  // <<<<< Add this method
+    {
+        return view('employee.show', compact('user'));
+    }
+    public function download($id)
+{
+    $employee = User::findOrFail($id);
+
+    $pdf = Pdf::loadView('employee.pdf', compact('employee')); // We'll create this view next
+
+    return $pdf->download($employee->name . '_details.pdf');
 }
 
 }
