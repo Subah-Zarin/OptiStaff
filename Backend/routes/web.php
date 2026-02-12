@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminPaymentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -65,11 +68,31 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     
-    // AI HR Chatbot Routes - ADD THESE 2 LINES
+    // AI HR Chatbot Routes 
     Route::get('/hr-chat', [ChatController::class, 'index'])->name('hr.chat');
     
     Route::post('/hr-chat/ask', [ChatController::class, 'ask'])->name('hr.chat.ask');
+    
+    
+        
 });
+//payment admin 
+
+// Admin Payment Routes
+Route::prefix('admin')->middleware(['auth','admin'])->group(function() {
+    Route::get('payments', [AdminPaymentController::class, 'index'])->name('admin.payments.index');
+    Route::get('payments/download/{id}', [AdminPaymentController::class, 'download'])->name('admin.payments.download');
+    Route::post('payments/mark-paid/{id}', [AdminPaymentController::class, 'markPaid'])->name('admin.payments.markPaid');
+});
+
+
+Route::get('/employee/payments', [PaymentController::class, 'employeeIndex'])
+    ->name('employee.payments');
+
+Route::get('/employee/payments/download/{id}', [PaymentController::class, 'employeeDownload'])
+    ->name('employee.payments.download');
+Route::get('employee/payments/verify/{id}', [PaymentController::class, 'verify'])
+     ->name('employee.payments.verify');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/holidays', [HolidayController::class, 'index'])->name('holidays.index');
