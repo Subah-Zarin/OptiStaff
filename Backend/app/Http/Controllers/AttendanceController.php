@@ -50,6 +50,20 @@ class AttendanceController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        // 1. Prevent employees from submitting attendance for others
+        if (auth()->user()->role === 'user' && $request->user_id != auth()->id()) {
+            return redirect()->route('attendance.index')->with('error', 'You can only mark attendance for yourself.');
+        }
+
+        // 2. Prevent multiple attendance entries for the same day
+        $alreadyMarked = Attendance::where('user_id', $request->user_id)
+            ->whereDate('date', $request->date)
+            ->exists();
+
+        if ($alreadyMarked) {
+            return redirect()->route('attendance.index')->with('error', 'Attendance has already been marked for this day.');
+        }
+
         if ($this->isLocked($request->date)) {
             return redirect()->route('attendance.index')->with('error', 'Cannot add attendance. The period is locked.');
         }
@@ -90,6 +104,12 @@ class AttendanceController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        // Optional: If regular users can edit their attendance, you may want to add the auth check here too.
+        // If only admins can edit, then you don't need the check.
+        if (auth()->user()->role === 'user' && $request->user_id != auth()->id()) {
+            return redirect()->route('attendance.index')->with('error', 'You can only update your own attendance.');
+        }
+
         if ($this->isLocked($request->date)) {
             return redirect()->route('attendance.index')->with('error', 'Cannot update attendance. The period is locked.');
         }
@@ -116,6 +136,12 @@ class AttendanceController extends Controller
     public function destroy($id)
     {
         $attendance = Attendance::findOrFail($id);
+        
+        // Optional: Prevent employees from deleting other people's attendance
+        if (auth()->user()->role === 'user' && $attendance->user_id != auth()->id()) {
+            return redirect()->route('attendance.index')->with('error', 'You can only delete your own attendance.');
+        }
+
         if ($this->isLocked($attendance->date)) {
             return redirect()->route('attendance.index')->with('error', 'Cannot delete attendance. The period is locked.');
         }
