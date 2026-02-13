@@ -18,29 +18,34 @@ class DashboardController extends Controller
                         ->where('status', 'Present')
                         ->count();
 
+        // FIXED LATE LOGIC: Status is Present, but check_in is after 09:30:00
         $lateDays = Attendance::where('user_id', $user->id)
-                        ->where('status', 'Late')
+                        ->where('status', 'Present')
+                        ->whereTime('check_in', '>', '09:30:00')
                         ->count();
 
         $absentDays = Attendance::where('user_id', $user->id)
                         ->where('status', 'Absent')
                         ->count();
 
-        // Leave summary grouped by leave type
-        $leaveSummary = Leave::where('user_id', $user->id)
-                        ->get()
-                        ->groupBy('leave_type')
-                        ->map(function ($leaves) {
-                            $total = $leaves->count();
-                            $taken = $leaves->where('status', 'Approved')->count();
-                            return [
-                                'total' => $total,
-                                'taken' => $taken,
-                                'remaining' => $total - $taken
-                            ];
-                        });
+        // FIXED LEAVE SUMMARY LOGIC: Using standard company entitlements and summing actual days
+        $totalLeaves = ['Casual' => 12, 'Sick' => 10, 'Earned' => 15];
+        $leaveSummary = [];
+        
+        foreach (['Casual', 'Sick', 'Earned'] as $type) {
+            $taken = Leave::where('user_id', $user->id)
+                          ->where('leave_type', $type)
+                          ->where('status', 'Approved')
+                          ->sum('number_of_days');
+                          
+            $leaveSummary[$type] = [
+                'total' => $totalLeaves[$type],
+                'taken' => $taken,
+                'remaining' => $totalLeaves[$type] - $taken
+            ];
+        }
 
-        // Pending & Approved leaves
+        // Pending & Approved leave requests count (for the top cards)
         $pendingLeaves = Leave::where('user_id', $user->id)
                         ->where('status', 'Pending')
                         ->count();
@@ -49,7 +54,7 @@ class DashboardController extends Controller
                         ->where('status', 'Approved')
                         ->count();
 
-        // Example attendance chart data (Mon-Fri)
+        // Attendance chart data (Mon-Fri)
         $attendanceData = [
             'Mon' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek())->where('status', 'Present')->count(),
             'Tue' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek()->addDay(1))->where('status', 'Present')->count(),
@@ -58,18 +63,12 @@ class DashboardController extends Controller
             'Fri' => Attendance::where('user_id', $user->id)->whereDate('date', now()->startOfWeek()->addDay(4))->where('status', 'Present')->count(),
         ];
 
-        // Leave type counts
-        $casualLeave = Leave::where('user_id', $user->id)
-                        ->where('leave_type', 'Casual')
-                        ->count();
-        $sickLeave = Leave::where('user_id', $user->id)
-                        ->where('leave_type', 'Sick')
-                        ->count();
-        $otherLeave = Leave::where('user_id', $user->id)
-                        ->where('leave_type', 'Other')
-                        ->count();
+        // Leave type counts for Doughnut Chart
+        $casualLeave = $leaveSummary['Casual']['taken'];
+        $sickLeave = $leaveSummary['Sick']['taken'];
+        $otherLeave = $leaveSummary['Earned']['taken'];
 
-        // Example: Employee type distribution (replace with real data)
+        // Example: Employee type distribution (replace with real data when you have it)
         $fullTime = 400;
         $partTime = 100;
         $internship = 50;

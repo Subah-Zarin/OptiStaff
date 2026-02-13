@@ -41,9 +41,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Admin dashboard
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     
-    // AI HR Chatbot Routes 
+   // AI HR Chatbot
     Route::get('/hr-chat', [ChatController::class, 'index'])->name('hr.chat');
     Route::post('/hr-chat/ask', [ChatController::class, 'ask'])->name('hr.chat.ask');
+    
+    // Add this line right here! If they accidentally GET the /ask route, send them back to the chat.
+    Route::get('/hr-chat/ask', function() { return redirect()->route('hr.chat'); });
     
     // Admin Payment Routes
     Route::prefix('admin')->group(function() {

@@ -17,9 +17,9 @@
                         <h1 class="text-3xl font-semibold text-gray-800">Welcome, {{ $user->name }}!</h1>
                         <p class="text-gray-500 mt-1">Here’s your HR overview at a glance.</p>
                     </div>
-                    <a href="#" class="px-5 py-3 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition">
-                        View Profile
-                    </a>
+                   <a href="{{ route('employees.show', auth()->id()) }}" class="px-5 py-3 bg-blue-500 text-white font-medium rounded-lg shadow hover:bg-blue-600 transition">
+    View Profile
+</a>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-6">

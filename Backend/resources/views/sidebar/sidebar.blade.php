@@ -14,7 +14,7 @@
                 ['label' => 'Employees', 'icon' => 'user-group', 'url' => route('employees.index')],
                 ['label' => 'Attendance', 'icon' => 'clipboard-list', 'url' => '#', 'sub' => [
                     ['label' => 'Attendance Log', 'url' => route('attendance.index')],
-                    ['label' => 'Performance Report', 'url' => route('attendance.report')]
+                    
                 ]],
 
                 ['label' => 'Leave Management', 'icon' => 'document-text', 'url' => '#', 'sub' => [

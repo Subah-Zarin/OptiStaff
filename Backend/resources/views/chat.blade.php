@@ -133,6 +133,16 @@
         .results-section {
             margin-top: 25px;
         }
+
+        .text-reply-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+            color: var(--secondary-color);
+        }
         
         .results-header {
             display: flex;
@@ -240,7 +250,7 @@
         <div class="chat-container">
             <form method="POST" action="{{ route('hr.chat.ask') }}" class="input-form">
                 @csrf
-                <input type="text" name="query" placeholder="Ask HR Analytics" autocomplete="off">
+                <input type="text" name="query" placeholder="Ask HR Analytics (e.g., 'Hello' or 'Show me all holidays')" autocomplete="off" required>
                 <button type="submit">Send</button>
             </form>
             
@@ -251,12 +261,23 @@
                     <div class="query-text">{{ $query }}</div>
                 </div>
                 
+                {{-- SCENARIO 1: ERROR OCCURRED --}}
                 @if(isset($error))
                 <div class="error-message">
                     <span class="error-icon">⚠️</span>
                     <strong>Error:</strong> {{ $error }}
                 </div>
-                @else
+                
+                {{-- SCENARIO 2: NORMAL TEXT CONVERSATION (Hello, How-to questions) --}}
+                @elseif(isset($text_reply))
+                <div class="results-section">
+                    <div class="text-reply-section">
+                        {!! nl2br(e($text_reply)) !!}
+                    </div>
+                </div>
+
+                {{-- SCENARIO 3: DATABASE SQL RESULTS --}}
+                @elseif(isset($results))
                     @php $firstRow = $results[0] ?? null; @endphp
 
                     @if($firstRow)
@@ -289,7 +310,7 @@
                     </div>
                     @else
                     <div class="no-results">
-                        No results found for your query.
+                        No records matched your request.
                     </div>
                     @endif
                 @endif
