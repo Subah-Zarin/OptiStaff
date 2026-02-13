@@ -4,10 +4,31 @@
 <div class="container mx-auto p-6 max-w-md">
     <h1 class="text-2xl font-bold mb-4">Request Leave</h1>
 
+    @if (session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+
     <form action="{{ route('leave.store') }}" method="POST" class="bg-white p-6 rounded shadow" id="leaveForm">
         @csrf
 
-        <!-- Leave Type -->
         <div class="mb-4">
             <label for="leave_type" class="block font-medium mb-1">Leave Type</label>
             <select name="leave_type" id="leave_type" class="w-full border rounded p-2">
@@ -20,7 +41,6 @@
             @enderror
         </div>
 
-        <!-- Duration -->
         <div class="mb-4">
             <label class="block font-medium mb-1">Duration</label>
             <div class="flex items-center gap-4">
@@ -34,7 +54,6 @@
                 </label>
             </div>
 
-            <!-- AM/PM selection for Half Day -->
             <div id="halfDaySelect" class="mt-2 hidden">
                 <label class="block font-medium mb-1">Select Half Day</label>
                 <select name="half_day_type" class="w-full border rounded p-2">
@@ -44,19 +63,17 @@
             </div>
         </div>
 
-        <!-- From Date -->
         <div class="mb-4">
             <label for="from_date" class="block font-medium mb-1">From Date</label>
-            <input type="date" name="from_date" id="from_date" class="w-full border rounded p-2">
+            <input type="date" name="from_date" id="from_date" min="{{ date('Y-m-d') }}" class="w-full border rounded p-2">
             @error('from_date')
                 <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
 
-        <!-- To Date -->
         <div class="mb-4">
             <label for="to_date" class="block font-medium mb-1">To Date</label>
-            <input type="date" name="to_date" id="to_date" class="w-full border rounded p-2">
+            <input type="date" name="to_date" id="to_date" min="{{ date('Y-m-d') }}" class="w-full border rounded p-2">
             <p class="text-gray-400 text-sm mt-1">Optional if applying for a single day</p>
             @error('to_date')
                 <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -67,7 +84,6 @@
     </form>
 </div>
 
-<!-- JS for Half Day toggle -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const durationRadios = document.querySelectorAll('input[name="duration"]');
@@ -83,19 +99,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Optional: Auto-calculate total days on submit
+    // Optional: Auto-calculate total days on submit (skipping Friday and Saturday)
     const form = document.getElementById('leaveForm');
     form.addEventListener('submit', function(e) {
-        const fromDate = new Date(document.getElementById('from_date').value);
+        const fromDateInput = document.getElementById('from_date').value;
         const toDateInput = document.getElementById('to_date').value;
         const duration = document.querySelector('input[name="duration"]:checked').value;
 
+        if (!fromDateInput) return; // Prevent calculation if no date
+
+        const fromDate = new Date(fromDateInput);
         let days = 0;
+
         if (toDateInput) {
             const toDate = new Date(toDateInput);
-            days = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24)) + 1;
+            let currentDate = new Date(fromDate);
+            
+            // Loop through dates and skip Friday (5) and Saturday (6)
+            while (currentDate <= toDate) {
+                let dayOfWeek = currentDate.getDay();
+                if (dayOfWeek !== 5 && dayOfWeek !== 6) {
+                    days++;
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
         } else {
-            days = 1;
+            let dayOfWeek = fromDate.getDay();
+            days = (dayOfWeek !== 5 && dayOfWeek !== 6) ? 1 : 0;
         }
 
         if (duration === 'Half') {

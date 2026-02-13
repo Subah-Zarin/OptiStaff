@@ -8,9 +8,10 @@ use App\Models\Holiday;
 class HolidayController extends Controller
 {
     // Admin view
-    public function Index()
+    public function index()
     {
-        $holidays = Holiday::all();
+        // Added orderBy so admins see holidays in chronological order
+        $holidays = Holiday::orderBy('date')->get();
         return view('Leave.admin_holiday', compact('holidays'));
     }
 
@@ -22,7 +23,7 @@ class HolidayController extends Controller
         ]);
 
         Holiday::create($request->all());
-        return redirect()->route('holidays.admin')->with('success', 'Holiday added successfully!');
+        return redirect()->route('holidays.index')->with('success', 'Holiday added successfully!');
     }
 
     public function update(Request $request, Holiday $holiday)
@@ -33,13 +34,13 @@ class HolidayController extends Controller
         ]);
 
         $holiday->update($request->all());
-        return redirect()->route('holidays.admin')->with('success', 'Holiday updated successfully!');
+        return redirect()->route('holidays.index')->with('success', 'Holiday updated successfully!');
     }
 
     public function destroy(Holiday $holiday)
     {
         $holiday->delete();
-        return redirect()->route('holidays.admin')->with('success', 'Holiday deleted successfully!');
+        return redirect()->route('holidays.index')->with('success', 'Holiday deleted successfully!');
     }
 
     // Employee view

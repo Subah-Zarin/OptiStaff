@@ -25,11 +25,32 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::get('/attendance-report', [AttendanceController::class, 'report'])->name('attendance.report');
 
-// New Attendance Locking Routes (Admin Only)
+// Admin Only Routes
 Route::middleware(['auth', 'admin'])->group(function () {
+    // Attendance Locking
     Route::get('/attendance/lock', [AttendanceLockController::class, 'index'])->name('attendance.lock.index');
     Route::post('/attendance/lock', [AttendanceLockController::class, 'store'])->name('attendance.lock.store');
     Route::delete('/attendance/unlock', [AttendanceLockController::class, 'destroy'])->name('attendance.lock.destroy');
+    
+    // Admin Holiday Management (Moved here for security)
+    Route::get('/holidays', [HolidayController::class, 'index'])->name('holidays.index');
+    Route::post('/holidays', [HolidayController::class, 'store'])->name('holidays.store');
+    Route::put('/holidays/{holiday}', [HolidayController::class, 'update'])->name('holidays.update');
+    Route::delete('/holidays/{holiday}', [HolidayController::class, 'destroy'])->name('holidays.destroy');
+    
+    // Admin dashboard
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    
+    // AI HR Chatbot Routes 
+    Route::get('/hr-chat', [ChatController::class, 'index'])->name('hr.chat');
+    Route::post('/hr-chat/ask', [ChatController::class, 'ask'])->name('hr.chat.ask');
+    
+    // Admin Payment Routes
+    Route::prefix('admin')->group(function() {
+        Route::get('payments', [AdminPaymentController::class, 'index'])->name('admin.payments.index');
+        Route::get('payments/download/{id}', [AdminPaymentController::class, 'download'])->name('admin.payments.download');
+        Route::post('payments/mark-paid/{id}', [AdminPaymentController::class, 'markPaid'])->name('admin.payments.markPaid');
+    });
 });
 
 Route::resource('attendance', AttendanceController::class);
@@ -40,8 +61,6 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/leave', [LeaveController::class, 'store'])->name('leave.store');
     Route::delete('/leave/{id}', [LeaveController::class, 'destroy'])->name('leave.cancel');
     Route::get('/leave/holidays', [HolidayController::class, 'employeeIndex'])->name('leave.holidays');
-
-
 });
 
 // Admin view to see all leave requests
@@ -49,13 +68,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/leave/leave_approvals', [LeaveController::class, 'approvals'])->name('leave.approvals');
     Route::put('/leave/approve/{id}', [LeaveController::class, 'approve'])->name('leave.approve');
     Route::put('/leave/reject/{id}', [LeaveController::class, 'reject'])->name('leave.reject');
-     Route::get('/leave_status', [LeaveController::class, 'status'])->name('leave.leave_status');
+    Route::get('/leave_status', [LeaveController::class, 'status'])->name('leave.leave_status');
 });
 
 Route::get('/policy', function () {
     return view('policy');
 })->name('policy');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -63,45 +81,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
 });
+
 Route::get('/employees/{user}', [EmployeeController::class, 'show'])->name('employees.show');
 Route::get('/employees/{id}/download', [EmployeeController::class, 'download'])->name('employees.download');
-// Admin dashboard
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    
-    // AI HR Chatbot Routes 
-    Route::get('/hr-chat', [ChatController::class, 'index'])->name('hr.chat');
-    
-    Route::post('/hr-chat/ask', [ChatController::class, 'ask'])->name('hr.chat.ask');
-    
-    
-        
-});
-//payment admin 
 
-// Admin Payment Routes
-Route::prefix('admin')->middleware(['auth','admin'])->group(function() {
-    Route::get('payments', [AdminPaymentController::class, 'index'])->name('admin.payments.index');
-    Route::get('payments/download/{id}', [AdminPaymentController::class, 'download'])->name('admin.payments.download');
-    Route::post('payments/mark-paid/{id}', [AdminPaymentController::class, 'markPaid'])->name('admin.payments.markPaid');
-});
-
-
+// Employee Payment Routes
 Route::get('/employee/payments', [PaymentController::class, 'employeeIndex'])
     ->name('employee.payments');
-
 Route::get('/employee/payments/download/{id}', [PaymentController::class, 'employeeDownload'])
     ->name('employee.payments.download');
 Route::get('employee/payments/verify/{id}', [PaymentController::class, 'verify'])
      ->name('employee.payments.verify');
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/holidays', [HolidayController::class, 'index'])->name('holidays.index');
-    Route::post('/holidays', [HolidayController::class, 'store'])->name('holidays.store');
-    Route::put('/holidays/{holiday}', [HolidayController::class, 'update'])->name('holidays.update');
-    Route::delete('/holidays/{holiday}', [HolidayController::class, 'destroy'])->name('holidays.destroy');
-});
-
-
 
 require __DIR__.'/auth.php';

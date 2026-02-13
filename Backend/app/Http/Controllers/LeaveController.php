@@ -54,25 +54,63 @@ class LeaveController extends Controller
         $request->validate([
             'leave_type'    => 'required|string',
             'duration'      => 'required|in:Full,Half',
-            'from_date'     => 'required|date',
+            'from_date'     => 'required|date|after_or_equal:today', // Prevent past dates
             'to_date'       => 'nullable|date|after_or_equal:from_date',
             'half_day_type' => 'nullable|in:AM,PM',
         ]);
 
-        // Calculate number of days
-        if($request->duration === 'Half') {
+        $userId = Auth::id();
+        
+        // Define the To Date properly
+        $toDate = ($request->duration === 'Half') ? $request->from_date : ($request->to_date ?? $request->from_date);
+
+        // Fetch official company holidays within this date range
+        $companyHolidays = \App\Models\Holiday::whereBetween('date', [$request->from_date, $toDate])
+            ->pluck('date')
+            ->toArray();
+
+        // TASK 1: Calculate number of days excluding Fridays, Saturdays, and Holidays FIRST
+        $days = 0;
+        
+        if ($request->duration === 'Half') {
             $days = 0.5;
-            // For half day, to_date is optional
-            $toDate = $request->from_date;
         } else {
-            $from = new \DateTime($request->from_date);
-            $to   = new \DateTime($request->to_date ?? $request->from_date);
-            $days = $from->diff($to)->days + 1;
-            $toDate = $request->to_date ?? $request->from_date;
+            // Use CarbonPeriod to iterate through the dates
+            $period = CarbonPeriod::create($request->from_date, $toDate);
+            
+            foreach ($period as $date) {
+                $dateString = $date->format('Y-m-d');
+                
+                // Explicitly skip Fridays, Saturdays, AND official company holidays
+                if (!$date->isFriday() && !$date->isSaturday() && !in_array($dateString, $companyHolidays)) {
+                    $days++;
+                }
+            }
+        }
+
+        // If they selected only weekend days or holidays, stop immediately
+        if ($days == 0) {
+            return redirect()->back()->with('error', 'The selected dates fall on weekends (Fri/Sat) or official holidays. No leave required.');
+        }
+
+        // TASK 2: Check for overlapping leave requests ONLY IF it's a valid work day
+        $hasOverlap = Leave::where('user_id', $userId)
+            ->whereIn('status', ['Pending', 'Approved', 'approved'])
+            ->where(function ($query) use ($request, $toDate) {
+                $query->whereBetween('from_date', [$request->from_date, $toDate])
+                      ->orWhereBetween('to_date', [$request->from_date, $toDate])
+                      ->orWhere(function ($q) use ($request, $toDate) {
+                          $q->where('from_date', '<=', $request->from_date)
+                            ->where('to_date', '>=', $toDate);
+                      });
+            })->exists();
+
+        if ($hasOverlap) {
+            return redirect()->back()->with('error', 'You already have a leave request during these dates.');
         }
 
         Leave::create([
-            'user_id'       => Auth::id(),
+            'user_id'       => $userId,
             'leave_type'    => $request->leave_type,
             'duration'      => $request->duration,
             'half_day_type' => $request->duration === 'Half' ? $request->half_day_type : null,
@@ -96,34 +134,34 @@ class LeaveController extends Controller
     }
 
     public function approvals() {
-    // Fetch all leave requests with user info
-    $leaves = Leave::with('user')->latest()->get();
-    return view('Leave.leave_approvals', compact('leaves'));
-}
-
-public function approve($id) {
-    $leave = Leave::findOrFail($id);
-    $leave->update(['status' => 'Approved']); // Capitalize for consistency
-
-    // Auto-mark attendance as 'Leave'
-    $period = CarbonPeriod::create($leave->from_date, $leave->to_date);
-    foreach ($period as $date) {
-        Attendance::updateOrCreate(
-            ['user_id' => $leave->user_id, 'date' => $date->toDateString()],
-            ['status' => 'Leave']
-        );
+        // Fetch all leave requests with user info
+        $leaves = Leave::with('user')->latest()->get();
+        return view('Leave.leave_approvals', compact('leaves'));
     }
 
-    return back()->with('success', 'Leave approved successfully!');
-}
+    public function approve($id) {
+        $leave = Leave::findOrFail($id);
+        $leave->update(['status' => 'Approved']); // Capitalize for consistency
 
-public function reject($id) {
-    $leave = Leave::findOrFail($id);
-    $leave->update(['status' => 'Rejected']); // Capitalize for consistency
-    return back()->with('success', 'Leave rejected successfully!');
-}
+        // Auto-mark attendance as 'Leave'
+        $period = CarbonPeriod::create($leave->from_date, $leave->to_date);
+        foreach ($period as $date) {
+            Attendance::updateOrCreate(
+                ['user_id' => $leave->user_id, 'date' => $date->toDateString()],
+                ['status' => 'Leave']
+            );
+        }
 
-// Admin: leave status report (who’s on leave, returned, balances)
+        return back()->with('success', 'Leave approved successfully!');
+    }
+
+    public function reject($id) {
+        $leave = Leave::findOrFail($id);
+        $leave->update(['status' => 'Rejected']); // Capitalize for consistency
+        return back()->with('success', 'Leave rejected successfully!');
+    }
+
+    // Admin: leave status report (who’s on leave, returned, balances)
     public function status()
     {
         if (! Auth::check() || Auth::user()->role !== 'admin') {
@@ -183,6 +221,4 @@ public function reject($id) {
 
         return view('Leave.leave_status', compact('onLeaveToday', 'recentlyReturned', 'summary', 'metrics'));
     }
-
-
 }
