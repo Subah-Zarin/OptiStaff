@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\Admin\AdminApprovalController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -78,6 +79,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/holidays/{holiday}', [HolidayController::class, 'destroy'])->name('holidays.destroy');
 });
 
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('/approvals', [AdminApprovalController::class, 'index'])->name('admin.approvals');
+    Route::post('/approvals/{user}/approve', [AdminApprovalController::class, 'approve'])->name('admin.approvals.approve');
+    Route::post('/approvals/{user}/reject', [AdminApprovalController::class, 'reject'])->name('admin.approvals.reject');
+});
 
 
 require __DIR__.'/auth.php';
