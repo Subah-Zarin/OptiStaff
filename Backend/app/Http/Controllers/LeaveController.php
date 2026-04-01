@@ -56,9 +56,16 @@ class LeaveController extends Controller
             'duration'      => 'required|in:Full,Half',
             'from_date'     => 'required|date|after_or_equal:today', // Prevent past dates
             'to_date'       => 'nullable|date|after_or_equal:from_date',
-            'half_day_type' => 'nullable|in:AM,PM',
-            'description' => 'required|string|max:500',
-        ]);
+            'half_day_type' => 'nullable|in:AM,PM', 
+   'description'   => 'nullable|string',
+    'attachment'    => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+]);
+
+$filePath = null;
+
+if ($request->hasFile('attachment')) {
+    $filePath = $request->file('attachment')->store('leave_attachments', 'public');
+}
 
         $userId = Auth::id();
         
@@ -119,6 +126,8 @@ class LeaveController extends Controller
             'to_date'       => $toDate,
             'number_of_days'=> $days,
             'status'        => 'Pending',
+            'description' => $request->description,
+'attachment'  => $filePath,
         ]);
 
         return redirect()->route('leave.index')->with('success', 'Leave request submitted successfully.');

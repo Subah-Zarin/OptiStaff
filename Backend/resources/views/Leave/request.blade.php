@@ -26,7 +26,7 @@
         </div>
     @endif
 
-    <form action="{{ route('leave.store') }}" method="POST" class="bg-white p-6 rounded shadow" id="leaveForm">
+    <form action="{{ route('leave.store') }}" method="POST" class="bg-white p-6 rounded shadow" id="leaveForm" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-4">
@@ -82,11 +82,26 @@
 
         <div class="mb-4">
     <label for="description" class="block font-medium mb-1">Reason for Leave</label>
+
+    <!-- Text Reason -->
     <textarea name="description" id="description" rows="4"
         class="w-full border rounded p-2"
         placeholder="Explain why you need this leave..."></textarea>
 
+    <!-- File Upload -->
+    <div class="mt-3">
+        <label class="block font-medium mb-1">Upload Supporting Document (Optional)</label>
+        <input type="file" name="attachment"
+            accept=".pdf,image/*"
+            class="w-full border rounded p-2 bg-white">
+        <p class="text-gray-400 text-sm mt-1">Allowed: PDF, JPG, PNG</p>
+    </div>
+
     @error('description')
+        <p class="text-red-500 text-sm">{{ $message }}</p>
+    @enderror
+
+    @error('attachment')
         <p class="text-red-500 text-sm">{{ $message }}</p>
     @enderror
 </div>
