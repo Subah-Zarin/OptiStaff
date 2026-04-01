@@ -37,8 +37,10 @@
                                 <th>From</th>
                                 <th>To</th>
                                 <th>Days</th>
+                                <th>Reason</th>
                                 <th>Status</th>
                                 <th>Action</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -51,6 +53,11 @@
                                     <td>{{ \Carbon\Carbon::parse($leave->from_date)->format('d M, Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($leave->to_date)->format('d M, Y') }}</td>
                                     <td>{{ $leave->number_of_days }}</td>
+                                    <td>
+    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#reasonModal{{ $leave->id }}">
+        View
+    </button>
+</td>
                                     <td>
                                         <span class="badge 
                                             @if(strtolower($leave->status) == 'pending') bg-warning text-dark
@@ -90,6 +97,29 @@
                                         @endif
                                     </td>
                                 </tr>
+                                <div class="modal fade" id="reasonModal{{ $leave->id }}" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Leave Reason</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p><strong>Employee:</strong> {{ $leave->user->name }}</p>
+        <p><strong>Leave Type:</strong> {{ $leave->leave_type }}</p>
+        <hr>
+        <p>{{ $leave->description ?? 'No description provided.' }}</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
                             @endforeach
                         </tbody>
                     </table>

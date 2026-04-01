@@ -26,6 +26,20 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        if (Auth::user()->role === 'admin' && Auth::user()->status === 'pending') {
+    Auth::logout();
+    return back()->withErrors([
+        'email' => 'Your admin account is pending approval.',
+    ]);
+}
+
+if (Auth::user()->status === 'rejected') {
+    Auth::logout();
+    return back()->withErrors([
+        'email' => 'Your registration request was rejected.',
+    ]);
+}
+
         $request->session()->regenerate();
 
         if (auth()->user()->role === 'admin') {

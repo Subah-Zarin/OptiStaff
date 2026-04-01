@@ -12,6 +12,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminPaymentController;
+use App\Http\Controllers\Admin\AdminApprovalController;
+
 
 
 Route::get('/', function () {
@@ -83,6 +85,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
+});
+
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('/approvals', [AdminApprovalController::class, 'index'])->name('admin.approvals');
+    Route::post('/approvals/{user}/approve', [AdminApprovalController::class, 'approve'])->name('admin.approvals.approve');
+    Route::post('/approvals/{user}/reject', [AdminApprovalController::class, 'reject'])->name('admin.approvals.reject');
 });
 
 Route::get('/employees/{user}', [EmployeeController::class, 'show'])->name('employees.show');

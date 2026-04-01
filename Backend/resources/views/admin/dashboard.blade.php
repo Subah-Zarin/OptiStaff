@@ -2,6 +2,81 @@
 
 @section('content')
 <div class="p-6 space-y-6">
+    {{-- Notification Bell + Pending Admin Requests --}}
+@php
+    $pendingAdminRequests = \App\Models\User::where('role', 'admin')
+        ->where('status', 'pending')
+        ->get();
+    $unreadCount = auth()->user()->unreadNotifications->count();
+@endphp
+
+@if($pendingAdminRequests->count() > 0)
+<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5 shadow-sm">
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center space-x-3">
+            {{-- Bell Icon --}}
+            <div class="relative">
+                <div class="p-2 bg-yellow-100 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                </div>
+                @if($unreadCount > 0)
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ $unreadCount }}
+                    </span>
+                @endif
+            </div>
+            <div>
+                <h3 class="text-base font-semibold text-yellow-800">Pending Admin Registration Requests</h3>
+                <p class="text-sm text-yellow-600">{{ $pendingAdminRequests->count() }} request(s) waiting for your approval</p>
+            </div>
+        </div>
+        <a href="{{ route('admin.approvals') }}"
+           class="text-sm text-blue-600 hover:underline font-medium">
+            View All →
+        </a>
+    </div>
+
+    {{-- Requests Table --}}
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+            <thead>
+                <tr class="text-yellow-700 border-b border-yellow-200">
+                    <th class="pb-2 font-semibold">Name</th>
+                    <th class="pb-2 font-semibold">Email</th>
+                    <th class="pb-2 font-semibold">Requested At</th>
+                    <th class="pb-2 font-semibold">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($pendingAdminRequests as $applicant)
+                <tr class="border-b border-yellow-100 hover:bg-yellow-100 transition">
+                    <td class="py-2 text-gray-700 font-medium">{{ $applicant->name }}</td>
+                    <td class="py-2 text-gray-500">{{ $applicant->email }}</td>
+                    <td class="py-2 text-gray-400">{{ $applicant->created_at->format('d M Y, h:i A') }}</td>
+                    <td class="py-2 flex gap-2">
+                        <form method="POST" action="{{ route('admin.approvals.approve', $applicant) }}">
+                            @csrf
+                            <button class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded-lg transition">
+                                ✓ Approve
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('admin.approvals.reject', $applicant) }}">
+                            @csrf
+                            <button class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded-lg transition">
+                                ✗ Reject
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endif
 
     {{-- KPI Summary Row --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">

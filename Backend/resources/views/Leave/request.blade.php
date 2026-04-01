@@ -80,6 +80,17 @@
             @enderror
         </div>
 
+        <div class="mb-4">
+    <label for="description" class="block font-medium mb-1">Reason for Leave</label>
+    <textarea name="description" id="description" rows="4"
+        class="w-full border rounded p-2"
+        placeholder="Explain why you need this leave..."></textarea>
+
+    @error('description')
+        <p class="text-red-500 text-sm">{{ $message }}</p>
+    @enderror
+</div>
+
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Submit Request</button>
     </form>
 </div>

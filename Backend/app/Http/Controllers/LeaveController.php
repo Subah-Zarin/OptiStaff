@@ -57,6 +57,7 @@ class LeaveController extends Controller
             'from_date'     => 'required|date|after_or_equal:today', // Prevent past dates
             'to_date'       => 'nullable|date|after_or_equal:from_date',
             'half_day_type' => 'nullable|in:AM,PM',
+            'description' => 'required|string|max:500',
         ]);
 
         $userId = Auth::id();
